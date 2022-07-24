@@ -5,7 +5,6 @@ namespace ECourses.Data.Identity
 {
     public class User : IdentityUser<Guid>
     {
-        public Guid? AuthorId { get; set; }
-        public Author? Author { get; set; }
+
     }
 }
