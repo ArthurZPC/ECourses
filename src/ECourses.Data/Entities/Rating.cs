@@ -6,7 +6,7 @@ namespace ECourses.Data.Entities
     {
         public int Value { get; set; }
 
-        public int CourseId { get; set; }
+        public Guid CourseId { get; set; }
         public Course Course { get; set; } = default!;
     }
 }
