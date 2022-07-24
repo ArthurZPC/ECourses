@@ -7,3 +7,9 @@
 1. Add your connection string for MSSQL Server DB in appsettings.json (Optional)
 
    - Also update defaultConnectionString variable in Program.cs
+
+### Notes:
+
+- Default administrator credentials:
+  - Email: **admin@admin.com**
+  - Password: **admin!**
