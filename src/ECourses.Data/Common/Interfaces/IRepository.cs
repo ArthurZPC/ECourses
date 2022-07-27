@@ -1,4 +1,5 @@
 ﻿using ECourses.Data.Common.Enums;
+using System.Linq.Expressions;
 
 namespace ECourses.Data.Common.Interfaces
 {
@@ -9,6 +10,6 @@ namespace ECourses.Data.Common.Interfaces
         Task<RepositoryOperationResult> Create(T entity);
         Task<RepositoryOperationResult> Update(Guid id, T entity);
         Task<RepositoryOperationResult> Delete(Guid id);
-        Task<IEnumerable<T>> GetByField<TField>(Func<T, TField> fieldSelector);
+        Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> selector);
     }
 }
