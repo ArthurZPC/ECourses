@@ -1,4 +1,4 @@
-﻿namespace ECourses.Data.Exceptions
+﻿namespace ECourses.Data.Common.Exceptions
 {
     public class DatabaseSeedingException : Exception
     {

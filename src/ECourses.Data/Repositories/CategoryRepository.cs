@@ -1,5 +1,4 @@
-﻿using ECourses.Data.Common.Enums;
-using ECourses.Data.Common.Interfaces;
+﻿using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -15,31 +14,20 @@ namespace ECourses.Data.Repositories
             _context = context;
         }
 
-        public async Task<RepositoryOperationResult> Create(Category entity)
+        public async Task Create(Category entity)
         {
             entity.Id = Guid.NewGuid();
 
             _context.Categories.Add(entity);
-
-            var entries = await _context.SaveChangesAsync();
-
-            return entries == 0 ? RepositoryOperationResult.Failure : RepositoryOperationResult.Success;
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<RepositoryOperationResult> Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var categoryToDelete = _context.Categories.FirstOrDefault(c => c.Id == id);
-
-            if (categoryToDelete is null)
-            {
-                return RepositoryOperationResult.Failure;
-            }
+            var categoryToDelete = await _context.Categories.FirstAsync(c => c.Id == id);
 
             _context.Categories.Remove(categoryToDelete);
-
-            var entries = await _context.SaveChangesAsync();
-
-            return entries == 0 ? RepositoryOperationResult.Failure : RepositoryOperationResult.Success;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Category>> GetAll()
@@ -67,20 +55,12 @@ namespace ECourses.Data.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<RepositoryOperationResult> Update(Category entity)
+        public async Task Update(Category entity)
         {
-            var categoryToUpdate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == entity.Id);
-
-            if (categoryToUpdate is null)
-            {
-                return RepositoryOperationResult.Failure;
-            }
-
+            var categoryToUpdate = await _context.Categories.FirstAsync(c => c.Id == entity.Id);
             _context.Categories.Update(entity);
 
-            var entries = await _context.SaveChangesAsync();
-
-            return entries == 0 ? RepositoryOperationResult.Failure : RepositoryOperationResult.Success;
+            await _context.SaveChangesAsync();
         }
     }
 }
