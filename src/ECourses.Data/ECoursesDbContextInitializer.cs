@@ -1,4 +1,4 @@
-﻿using ECourses.Data.Exceptions;
+﻿using ECourses.Data.Common.Exceptions;
 using ECourses.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

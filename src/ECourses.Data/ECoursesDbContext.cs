@@ -15,5 +15,11 @@ namespace ECourses.Data
         public DbSet<Video> Videos => Set<Video>();
 
         public ECoursesDbContext(DbContextOptions<ECoursesDbContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfigurationsFromAssembly(typeof(ECoursesDbContext).Assembly);
+            base.OnModelCreating(builder);
+        }
     }
 }
