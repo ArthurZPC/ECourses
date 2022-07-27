@@ -2,7 +2,7 @@
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 
-namespace ECourses.ApplicationCore.Interfaces
+namespace ECourses.ApplicationCore.Interfaces.Services
 {
     public interface ICategoryService
     {
@@ -10,7 +10,7 @@ namespace ECourses.ApplicationCore.Interfaces
         Task<CategoryViewModel?> GetCategoryById(Guid id);
         Task Create(CreateCategoryViewModel model);
         Task Delete(Guid id);
-        Task Update(Guid id, UpdateCategoryViewModel model);
+        Task Update(UpdateCategoryViewModel model);
 
     }
 }
