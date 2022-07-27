@@ -8,7 +8,7 @@ namespace ECourses.Data.Common.Interfaces
         Task<T?> GetById(Guid id);
         Task<IEnumerable<T>> GetAll();
         Task<RepositoryOperationResult> Create(T entity);
-        Task<RepositoryOperationResult> Update(Guid id, T entity);
+        Task<RepositoryOperationResult> Update(T entity);
         Task<RepositoryOperationResult> Delete(Guid id);
         Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> selector);
     }

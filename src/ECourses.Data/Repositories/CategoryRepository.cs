@@ -67,9 +67,9 @@ namespace ECourses.Data.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<RepositoryOperationResult> Update(Guid id, Category entity)
+        public async Task<RepositoryOperationResult> Update(Category entity)
         {
-            var categoryToUpdate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            var categoryToUpdate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == entity.Id);
 
             if (categoryToUpdate is null)
             {
