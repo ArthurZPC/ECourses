@@ -1,5 +1,4 @@
 using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.StartupTasks;
 using ECourses.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,12 +10,16 @@ builder.Services
     .ConfigureDatabase(defaultConnectionString)
     .ConfigureIdentity();
 
-builder.Services.AddStartupTask<DatabaseInitializationStartupTask>();
+builder.Services
+    .AddStartupTasks()
+    .AddRepositories()
+    .AddApplicationServices()
+    .AddControllers();
 
 var app = builder.Build();
 
 await app.RunStartupTasks();
 
-app.MapGet("/", () => "Hello World!");
+app.MapControllers();
 
 app.Run();

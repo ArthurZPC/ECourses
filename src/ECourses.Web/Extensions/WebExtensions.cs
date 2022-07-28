@@ -1,4 +1,6 @@
-﻿using ECourses.ApplicationCore.Interfaces;
+﻿using ECourses.ApplicationCore.Extensions;
+using ECourses.ApplicationCore.Interfaces;
+using ECourses.ApplicationCore.StartupTasks;
 
 namespace ECourses.Web.Extensions
 {
@@ -14,6 +16,13 @@ namespace ECourses.Web.Extensions
             }
 
             return app;
+        }
+
+        public static IServiceCollection AddStartupTasks(this IServiceCollection services)
+        {
+            services.AddStartupTask<DatabaseInitializationStartupTask>();
+
+            return services;
         }
     }
 }
