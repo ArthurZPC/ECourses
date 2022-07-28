@@ -59,7 +59,7 @@ namespace ECourses.Data
             var defaultUser = new User()
             {
                 UserName = "Administrator",
-                Email = "admin@admin.com"
+                Email = "admin@admin.com",
             };
 
             var administrators = await _userManager.GetUsersInRoleAsync(administratorRole.Name);
@@ -67,6 +67,7 @@ namespace ECourses.Data
             if (administrators.Count == 0)
             {
                 await _userManager.CreateAsync(defaultUser, "admin!");
+                await _userManager.AddToRoleAsync(defaultUser, administratorRole.Name);
             }
         }
     }
