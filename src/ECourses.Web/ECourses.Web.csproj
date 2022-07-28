@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECourses.Data\ECourses.Data.csproj" />
+    <ProjectReference Include="..\ECourses.ApplicationCore\ECourses.ApplicationCore.csproj" />
   </ItemGroup>
 
 </Project>

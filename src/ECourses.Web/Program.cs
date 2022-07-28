@@ -1,31 +1,21 @@
-using ECourses.Data;
-using ECourses.Data.Identity;
+using ECourses.ApplicationCore.Extensions;
+using ECourses.ApplicationCore.StartupTasks;
+using ECourses.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 var defaultConnectionString = configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddSqlServer<ECoursesDbContext>(defaultConnectionString, 
-    o => o.MigrationsAssembly(typeof(ECoursesDbContext).Assembly.FullName));
+builder.Services
+    .ConfigureDatabase(defaultConnectionString)
+    .ConfigureIdentity();
 
-builder.Services.AddScoped<ECoursesDbContextInitializer>();
-
-builder.Services.AddIdentity<User, Role>(o =>
-{
-    o.Password.RequireDigit = false;
-    o.Password.RequireUppercase = false;
-})
-    .AddEntityFrameworkStores<ECoursesDbContext>();
+builder.Services.AddStartupTask<DatabaseInitializationStartupTask>();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContextInitializer = scope.ServiceProvider.GetRequiredService<ECoursesDbContextInitializer>();
-    await dbContextInitializer.Initialize();
-    await dbContextInitializer.Seed();
-}
+await app.RunStartupTasks();
 
 app.MapGet("/", () => "Hello World!");
 
