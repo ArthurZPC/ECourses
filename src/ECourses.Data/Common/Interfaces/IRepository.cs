@@ -9,6 +9,6 @@ namespace ECourses.Data.Common.Interfaces
         Task Create(T entity);
         Task Update(T entity);
         Task Delete(Guid id);
-        Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> selector);
+        Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> predicate);
     }
 }

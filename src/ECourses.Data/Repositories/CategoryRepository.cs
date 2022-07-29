@@ -38,12 +38,12 @@ namespace ECourses.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Category>> GetByCondition(Expression<Func<Category, bool>> selector)
+        public async Task<IEnumerable<Category>> GetByCondition(Expression<Func<Category, bool>> predicate)
         {
             return await _context.Categories
                 .Include(c => c.Courses)
                 .AsNoTracking()
-                .Where(selector)
+                .Where(predicate)
                 .ToListAsync();
         }
 
