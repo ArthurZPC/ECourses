@@ -1,5 +1,6 @@
 using ECourses.ApplicationCore.Extensions;
 using ECourses.Web.Extensions;
+using ECourses.Web.Middlewares;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
@@ -56,6 +57,8 @@ app.UseSwaggerUI(o =>
 });
 
 app.UseStaticFiles();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 
