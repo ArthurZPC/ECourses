@@ -3,6 +3,7 @@ using ECourses.ApplicationCore.Interfaces;
 using ECourses.ApplicationCore.Interfaces.Converters;
 using ECourses.ApplicationCore.Interfaces.Services;
 using ECourses.ApplicationCore.Interfaces.Validators;
+using ECourses.ApplicationCore.Interfaces.Validators.Common;
 using ECourses.ApplicationCore.Services;
 using ECourses.ApplicationCore.Validators;
 using ECourses.Data;
@@ -56,6 +57,13 @@ namespace ECourses.ApplicationCore.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<ICategoryService, CategoryService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddGenericEntityValidator(this IServiceCollection services)
+        {
+            services.AddTransient(typeof(IEntityValidator<>), typeof(EntityValidator<>));
 
             return services;
         }
