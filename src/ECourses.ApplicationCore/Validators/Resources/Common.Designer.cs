@@ -61,7 +61,25 @@ namespace ECourses.ApplicationCore.Validators.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Model can&apos;t be null..
+        ///   Looks up a localized string similar to {0} already exists..
+        /// </summary>
+        internal static string Validation_Exists {
+            get {
+                return ResourceManager.GetString("Validation_Exists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} not found..
+        /// </summary>
+        internal static string Validation_NotFound {
+            get {
+                return ResourceManager.GetString("Validation_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} can&apos;t be null..
         /// </summary>
         internal static string Validation_Null {
             get {
