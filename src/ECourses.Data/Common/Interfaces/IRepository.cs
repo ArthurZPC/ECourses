@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using ECourses.Data.Common.QueryOptions;
+using System.Linq.Expressions;
 
 namespace ECourses.Data.Common.Interfaces
 {
@@ -10,5 +11,6 @@ namespace ECourses.Data.Common.Interfaces
         Task Update(T entity);
         Task Delete(Guid id);
         Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetPagedList(PaginationOptions paginationOptions, FilterOptions<T>? filterOptions = null, OrderOptions<T>? orderOptions = null);
     }
 }
