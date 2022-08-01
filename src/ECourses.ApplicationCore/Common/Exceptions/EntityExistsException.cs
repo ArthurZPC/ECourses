@@ -1,4 +1,4 @@
-﻿namespace ECourses.ApplicationCore.Exceptions
+﻿namespace ECourses.ApplicationCore.Common.Exceptions
 {
     public class EntityExistsException : Exception
     {
