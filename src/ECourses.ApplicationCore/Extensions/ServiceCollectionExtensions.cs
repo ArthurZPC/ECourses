@@ -1,9 +1,7 @@
 ﻿using ECourses.ApplicationCore.Converters;
-using ECourses.ApplicationCore.Interfaces;
-using ECourses.ApplicationCore.Interfaces.Converters;
-using ECourses.ApplicationCore.Interfaces.Services;
-using ECourses.ApplicationCore.Interfaces.Validators;
-using ECourses.ApplicationCore.Interfaces.Validators.Common;
+using ECourses.ApplicationCore.Common.Interfaces.Converters;
+using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Services;
 using ECourses.ApplicationCore.Validators;
 using ECourses.Data;
@@ -11,6 +9,7 @@ using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Identity;
 using ECourses.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
+using ECourses.ApplicationCore.Common.Interfaces;
 
 namespace ECourses.ApplicationCore.Extensions
 {

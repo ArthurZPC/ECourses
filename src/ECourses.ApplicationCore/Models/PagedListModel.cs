@@ -1,6 +1,6 @@
 ﻿namespace ECourses.ApplicationCore.Models
 {
-    public class PagedList<T> 
+    public class PagedListModel<T> 
     {
         public int Count { get; set; }
 
