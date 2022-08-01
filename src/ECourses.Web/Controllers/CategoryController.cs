@@ -1,4 +1,4 @@
-﻿using ECourses.ApplicationCore.Interfaces.Services;
+﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Web.Common;

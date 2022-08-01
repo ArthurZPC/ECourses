@@ -1,5 +1,5 @@
-﻿using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.Interfaces;
+﻿using ECourses.ApplicationCore.Common.Interfaces;
+using ECourses.ApplicationCore.Extensions;
 using ECourses.ApplicationCore.StartupTasks;
 
 namespace ECourses.Web.Extensions

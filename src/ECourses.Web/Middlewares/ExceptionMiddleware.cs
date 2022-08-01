@@ -1,4 +1,4 @@
-﻿using ECourses.ApplicationCore.Exceptions;
+﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.Web.Common;
 using System.Net;
 
