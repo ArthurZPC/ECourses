@@ -1,4 +1,4 @@
-﻿using ECourses.ApplicationCore.Interfaces.Converters;
+﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
 using ECourses.ApplicationCore.ViewModels;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
