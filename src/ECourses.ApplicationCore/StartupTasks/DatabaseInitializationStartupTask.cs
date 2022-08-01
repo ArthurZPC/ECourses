@@ -1,4 +1,4 @@
-﻿using ECourses.ApplicationCore.Interfaces;
+﻿using ECourses.ApplicationCore.Common.Interfaces;
 using ECourses.Data;
 using Microsoft.Extensions.DependencyInjection;
 

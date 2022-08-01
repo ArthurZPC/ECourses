@@ -1,6 +1,6 @@
-﻿using ECourses.ApplicationCore.Exceptions;
+﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.Interfaces.Validators.Common;
+using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.Data;
 using ECourses.Data.Common;
 using Microsoft.EntityFrameworkCore;

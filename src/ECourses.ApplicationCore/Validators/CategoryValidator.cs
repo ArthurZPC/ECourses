@@ -1,6 +1,6 @@
-﻿using ECourses.ApplicationCore.Exceptions;
+﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.Interfaces.Validators;
+using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Data.Common.Interfaces.Repositories;
