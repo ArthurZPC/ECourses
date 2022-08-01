@@ -1,4 +1,5 @@
-﻿using ECourses.Data.Common.Enums;
+﻿using ECourses.Data.Common;
+using ECourses.Data.Common.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Common.QueryOptions;
 using ECourses.Data.Entities;
@@ -57,7 +58,7 @@ namespace ECourses.Data.Repositories
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<IEnumerable<Tag>> GetPagedList(PaginationOptions paginationOptions, FilterOptions<Tag>? filterOptions = null, OrderOptions<Tag>? orderOptions = null)
+        public async Task<PagedList<Tag>> GetPagedList(PaginationOptions paginationOptions, FilterOptions<Tag>? filterOptions = null, OrderOptions<Tag>? orderOptions = null)
         {
             var query = _context.Tags.AsNoTracking();
 
@@ -78,7 +79,15 @@ namespace ECourses.Data.Repositories
             var count = paginationOptions.PageSize;
             var offset = paginationOptions.PageNumber;
 
-            return await query.Skip(count * offset - count).Take(count).ToListAsync();
+            var totalCount = await query.CountAsync();
+
+            var items = await query.Skip(count * offset - count).Take(count).ToListAsync();
+
+            return new PagedList<Tag>
+            {
+                Count = totalCount,
+                Items = items
+            };
         }
 
         public async Task Update(Tag entity)
