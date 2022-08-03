@@ -5,4 +5,10 @@
         public const string TitleAsc = "title_asc";
         public const string TitleDesc = "title_desc";
     }
+
+    public class TagOrderQueryConstants
+    {
+        public const string TitleAsc = "title_asc";
+        public const string TitleDesc = "title_desc";
+    }
 }

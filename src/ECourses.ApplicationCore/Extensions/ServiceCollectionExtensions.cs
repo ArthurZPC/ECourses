@@ -50,12 +50,17 @@ namespace ECourses.ApplicationCore.Extensions
             services.AddTransient<ICategoryValidator, CategoryValidator>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+            services.AddTransient<ITagConverter, TagConverter>();
+            services.AddTransient<ITagValidator, TagValidator>();
+            services.AddScoped<ITagRepository, TagRepository>();
+
             return services;
         }
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ITagService, TagService>();
 
             return services;
         }
