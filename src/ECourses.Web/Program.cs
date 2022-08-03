@@ -1,5 +1,6 @@
 using ECourses.ApplicationCore.Extensions;
 using ECourses.Web.Extensions;
+using ECourses.Web.Filters;
 using ECourses.Web.Middlewares;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
@@ -26,6 +27,7 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(o =>
     {
+        o.OperationFilter<CamelCasePropertiesFilter>();
         o.SwaggerDoc("v1", new OpenApiInfo
         {
             Title = "ECourses",
