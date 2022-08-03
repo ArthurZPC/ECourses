@@ -10,7 +10,7 @@ namespace ECourses.ApplicationCore.Converters
     {
         public Author ConvertToAuthor(AuthorViewModel model)
         {
-            return new Author()
+            return new Author
             {
                 Id = model.Id,
                 FirstName = model.FirstName,
@@ -21,7 +21,7 @@ namespace ECourses.ApplicationCore.Converters
 
         public Author ConvertToAuthor(CreateAuthorViewModel model)
         {
-            return new Author()
+            return new Author
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -31,7 +31,7 @@ namespace ECourses.ApplicationCore.Converters
 
         public Author ConvertToAuthor(UpdateAuthorViewModel model)
         {
-            return new Author()
+            return new Author
             {
                 Id = model.Id,
                 FirstName = model.FirstName,
@@ -42,7 +42,7 @@ namespace ECourses.ApplicationCore.Converters
 
         public AuthorViewModel ConvertToViewModel(Author model)
         {
-            return new AuthorViewModel()
+            return new AuthorViewModel
             {
                 Id = model.Id,
                 FirstName = model.FirstName,

@@ -10,7 +10,7 @@ namespace ECourses.ApplicationCore.Converters
     {
         public Tag ConvertToTag(TagViewModel model)
         {
-            return new Tag()
+            return new Tag
             {
                 Id = model.Id,
                 Title = model.Title,
@@ -19,7 +19,7 @@ namespace ECourses.ApplicationCore.Converters
 
         public Tag ConvertToTag(CreateTagViewModel model)
         {
-            return new Tag()
+            return new Tag
             {
                 Title = model.Title,
             };
@@ -27,7 +27,7 @@ namespace ECourses.ApplicationCore.Converters
 
         public Tag ConvertToTag(UpdateTagViewModel model)
         {
-            return new Tag()
+            return new Tag
             {
                 Id = model.Id,
                 Title = model.Title,
@@ -36,7 +36,7 @@ namespace ECourses.ApplicationCore.Converters
 
         public TagViewModel ConvertToViewModel(Tag model)
         {
-            return new TagViewModel()
+            return new TagViewModel
             {
                 Id = model.Id,
                 Title = model.Title,
