@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECourses.Data.Migrations
 {
     [DbContext(typeof(ECoursesDbContext))]
-    [Migration("20220803214735_AddedUserToRatingsTable")]
-    partial class AddedUserToRatingsTable
+    [Migration("20220803225650_AddIndexesToRatings")]
+    partial class AddIndexesToRatings
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,9 +141,10 @@ namespace ECourses.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("CourseId", "UserId")
+                        .IsUnique();
 
                     b.ToTable("Ratings");
                 });
@@ -441,9 +442,9 @@ namespace ECourses.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("ECourses.Data.Identity.User", "User")
-                        .WithMany()
+                        .WithMany("Ratings")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -533,6 +534,8 @@ namespace ECourses.Data.Migrations
             modelBuilder.Entity("ECourses.Data.Identity.User", b =>
                 {
                     b.Navigation("Author");
+
+                    b.Navigation("Ratings");
                 });
 #pragma warning restore 612, 618
         }

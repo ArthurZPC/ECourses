@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ECourses.Data.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECourses.Data.Entities.Configurations
@@ -9,6 +10,11 @@ namespace ECourses.Data.Entities.Configurations
         {
             builder.HasIndex(r => new { r.CourseId, r.UserId })
                 .IsUnique();
+
+            builder.HasOne<User>(r => r.User)
+                .WithMany(u => u.Ratings)
+                .OnDelete(DeleteBehavior.NoAction);
+                
         }
     }
 }

@@ -440,9 +440,9 @@ namespace ECourses.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("ECourses.Data.Identity.User", "User")
-                        .WithMany()
+                        .WithMany("Ratings")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -532,6 +532,8 @@ namespace ECourses.Data.Migrations
             modelBuilder.Entity("ECourses.Data.Identity.User", b =>
                 {
                     b.Navigation("Author");
+
+                    b.Navigation("Ratings");
                 });
 #pragma warning restore 612, 618
         }

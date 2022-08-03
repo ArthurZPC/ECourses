@@ -32,4 +32,10 @@
         public const string PriceAsc = "price_asc";
         public const string PriceDesc = "price_desc";
     }
+
+    public class RatingOrderQueryConstants
+    {
+        public const string ValueAsc = "value_asc";
+        public const string ValueDesc = "value_desc";
+    }
 }
