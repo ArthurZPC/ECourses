@@ -54,6 +54,10 @@ namespace ECourses.ApplicationCore.Extensions
             services.AddTransient<ITagValidator, TagValidator>();
             services.AddScoped<ITagRepository, TagRepository>();
 
+            services.AddTransient<IAuthorConverter, AuthorConverter>();
+            services.AddTransient<IAuthorValidator, AuthorValidator>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+
             return services;
         }
 
@@ -61,6 +65,7 @@ namespace ECourses.ApplicationCore.Extensions
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IAuthorService, AuthorService>();
 
             return services;
         }
