@@ -133,8 +133,7 @@ namespace ECourses.ApplicationCore.Services
                     Type = OrderType.Descending,
                     FieldSelector = c => c.Title
                 },
-                null => null,
-                _ => throw new Exception()
+                _ => null,
             };
         }
     }
