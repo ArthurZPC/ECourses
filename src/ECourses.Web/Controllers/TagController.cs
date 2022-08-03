@@ -24,9 +24,9 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
-            var categories = await _tagService.GetAllTags();
+            var tags = await _tagService.GetAllTags();
 
-            return Ok(categories);
+            return Ok(tags);
         }
 
         [HttpGet("{id:Guid}")]
@@ -34,9 +34,9 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var category = await _tagService.GetTagById(id);
+            var tag = await _tagService.GetTagById(id);
 
-            return Ok(category);
+            return Ok(tag);
         }
 
         [HttpPost]
@@ -74,9 +74,9 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllPaged([FromQuery] PaginationQuery paginationQuery, string? order, [FromQuery] TagFilterQuery filterQuery)
         {
-            var categories = await _tagService.GetPagedList(paginationQuery, order, filterQuery);
+            var tags = await _tagService.GetPagedList(paginationQuery, order, filterQuery);
 
-            return Ok(categories);
+            return Ok(tags);
         }
     }
 }
