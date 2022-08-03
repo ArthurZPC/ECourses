@@ -65,7 +65,6 @@ namespace ECourses.Data.Repositories
         {
             var query = _context.Authors
                 .Include(a => a.User)
-                .Include(a => a.Courses)
                 .AsNoTracking();
 
             if (filterOptions is not null)
