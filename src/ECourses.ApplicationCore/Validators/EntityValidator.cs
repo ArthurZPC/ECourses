@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace ECourses.ApplicationCore.Validators
 {
-    public class EntityValidator<T> : IEntityValidator<T> where T : Entity
+    public class EntityValidator<T> : IEntityValidator<T> where T : class
     {
         private readonly ECoursesDbContext _context;
 
