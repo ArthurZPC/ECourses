@@ -11,7 +11,14 @@ namespace ECourses.Web.Common
 
         public override string ToString()
         {
-            return JsonSerializer.Serialize(this);
+            var serializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+
+            return JsonSerializer.Serialize(this, serializerOptions);
         }
     }
 }
