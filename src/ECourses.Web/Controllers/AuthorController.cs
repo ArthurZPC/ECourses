@@ -24,9 +24,9 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
-            var categories = await _authorService.GetAllAuthors();
+            var authors = await _authorService.GetAllAuthors();
 
-            return Ok(categories);
+            return Ok(authors);
         }
 
         [HttpGet("{id:Guid}")]
