@@ -1,6 +1,8 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+using ECourses.ApplicationCore.WebQueries;
+using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Common;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +21,7 @@ namespace ECourses.Web.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
             var categories = await _categoryService.GetAllCategories();
@@ -64,6 +67,15 @@ namespace ECourses.Web.Controllers
             await _categoryService.Update(model);
 
             return Ok(model);
+        }
+
+        [HttpGet("Paged")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllPaged([FromQuery] PaginationQuery paginationQuery, string? order, [FromQuery] CategoryFilterQuery filterQuery)
+        {
+            var categories = await _categoryService.GetPagedList(paginationQuery, order, filterQuery);
+
+            return Ok(categories);
         }
     }
 }
