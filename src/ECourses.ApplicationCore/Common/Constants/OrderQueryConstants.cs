@@ -20,4 +20,16 @@
         public const string LastNameAsc = "lastName_asc";
         public const string LastNameDesc = "lastName_desc";
     }
+
+    public class CourseOrderQueryConstants
+    {
+        public const string TitleAsc = "title_asc";
+        public const string TitleDesc = "title_desc";
+
+        public const string PublishedAtAsc = "publishedAt_asc";
+        public const string PublishedAtDesc = "publishedAt_desc";
+
+        public const string PriceAsc = "price_asc";
+        public const string PriceDesc = "price_desc";
+    }
 }
