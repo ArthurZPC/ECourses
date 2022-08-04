@@ -1,3 +1,4 @@
+using ECourses.ApplicationCore.Common.Configuration;
 using ECourses.ApplicationCore.Extensions;
 using ECourses.Web.Extensions;
 using ECourses.Web.Filters;
@@ -17,7 +18,8 @@ builder.Services
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
-});
+})
+    .Configure<WebRootOptions>(c => c.WebRootLocation = builder.Configuration.GetValue<string>("WebRootLocation"));
 
 builder.Services
     .AddStartupTasks()

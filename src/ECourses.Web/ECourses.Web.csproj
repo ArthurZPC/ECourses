@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ECourses.ApplicationCore\ECourses.ApplicationCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

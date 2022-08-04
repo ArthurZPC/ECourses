@@ -38,4 +38,10 @@
         public const string ValueAsc = "value_asc";
         public const string ValueDesc = "value_desc";
     }
+
+    public class VideoOrderQueryConstants
+    {
+        public const string TitleAsc = "title_asc";
+        public const string TitleDesc = "title_desc";
+    }
 }

@@ -66,6 +66,10 @@ namespace ECourses.ApplicationCore.Extensions
             services.AddTransient<IRatingValidator, RatingValidator>();
             services.AddScoped<IRatingRepository, RatingRepository>();
 
+            services.AddTransient<IVideoConverter, VideoConverter>();
+            services.AddTransient<IVideoValidator, VideoValidator>();
+            services.AddScoped<IVideoRepository, VideoRepository>();
+
             return services;
         }
 
@@ -76,6 +80,7 @@ namespace ECourses.ApplicationCore.Extensions
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IRatingService, RatingService>();
+            services.AddScoped<IVideoService, VideoService>();
 
             return services;
         }
