@@ -15,9 +15,9 @@ namespace ECourses.Web.Controllers
     {
         private readonly IRatingService _ratingService;
 
-        public RatingController(IRatingService categoryService)
+        public RatingController(IRatingService ratingService)
         {
-            _ratingService = categoryService;
+            _ratingService = ratingService;
         }
 
         [HttpGet]

@@ -15,9 +15,9 @@ namespace ECourses.Web.Controllers
     {
         private readonly ITagService _tagService;
 
-        public TagController(ITagService categoryService)
+        public TagController(ITagService tagService)
         {
-            _tagService = categoryService;
+            _tagService = tagService;
         }
 
         [HttpGet]
