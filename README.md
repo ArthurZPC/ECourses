@@ -8,6 +8,8 @@
 
    - Also update defaultConnectionString variable in Program.cs
 
+2. Update JWT key in appsettings.json (Recommended)
+
 ### Notes:
 
 - Default administrator credentials:
