@@ -3,6 +3,7 @@ using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.ApplicationCore.WebQueries;
 using ECourses.ApplicationCore.WebQueries.Filters;
+using ECourses.Web.Attributes;
 using ECourses.Web.Common;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +43,7 @@ namespace ECourses.Web.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(CreateRatingViewModel model)
         {
             await _ratingService.Create(model);
@@ -52,6 +54,7 @@ namespace ECourses.Web.Controllers
         [HttpDelete("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _ratingService.Delete(id);
@@ -63,6 +66,7 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Update(UpdateRatingViewModel model)
         {
             await _ratingService.Update(model);

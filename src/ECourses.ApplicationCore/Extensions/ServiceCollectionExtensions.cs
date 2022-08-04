@@ -10,6 +10,8 @@ using ECourses.Data.Identity;
 using ECourses.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using ECourses.ApplicationCore.Common.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ECourses.ApplicationCore.Extensions
 {
@@ -81,6 +83,7 @@ namespace ECourses.ApplicationCore.Extensions
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<IVideoService, VideoService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }
@@ -88,6 +91,28 @@ namespace ECourses.ApplicationCore.Extensions
         public static IServiceCollection AddGenericEntityValidator(this IServiceCollection services)
         {
             services.AddTransient(typeof(IEntityValidator<>), typeof(EntityValidator<>));
+
+            return services;
+        }
+
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, byte[] jwtKey)
+        {
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(jwtKey),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
             return services;
         }

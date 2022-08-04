@@ -3,13 +3,18 @@ using ECourses.ApplicationCore.Extensions;
 using ECourses.Web.Extensions;
 using ECourses.Web.Filters;
 using ECourses.Web.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 var defaultConnectionString = configuration.GetConnectionString("DefaultConnection");
+
+var jwtKey = configuration.GetValue<string>("JWT:Key");
+var jwtKeyBytes = Encoding.ASCII.GetBytes(jwtKey);
 
 builder.Services
     .ConfigureDatabase(defaultConnectionString)
@@ -19,7 +24,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 })
-    .Configure<WebRootOptions>(c => c.WebRootLocation = builder.Configuration.GetValue<string>("WebRootLocation"));
+    .Configure<WebRootOptions>(x => x.WebRootLocation = builder.Configuration.GetValue<string>("WebRootLocation"))
+    .Configure<JwtOptions>(builder.Configuration.GetSection("JWT"));
 
 builder.Services
     .AddStartupTasks()
@@ -29,6 +35,26 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(o =>
     {
+        var securityScheme = new OpenApiSecurityScheme
+        {
+            Name = "JWT Authentication",
+            Description = "Enter JWT token without 'Bearer'",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Reference = new OpenApiReference
+            {
+                Id = JwtBearerDefaults.AuthenticationScheme,
+                Type = ReferenceType.SecurityScheme,
+            }
+        };
+
+        o.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+        o.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            { securityScheme, Array.Empty<string>() }
+        });
         o.OperationFilter<CamelCasePropertiesFilter>();
         o.SwaggerDoc("v1", new OpenApiInfo
         {
@@ -43,6 +69,10 @@ builder.Services
         });
     })
     .AddControllers();
+
+    builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddJwtAuthentication(jwtKeyBytes);
 
 var app = builder.Build();
 
@@ -61,9 +91,15 @@ app.UseSwaggerUI(o =>
 });
 
 app.UseStaticFiles();
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.MapControllers();
+app.UseMiddleware<JwtMiddleware>();
+
+app.UseEndpoints(c => c.MapControllers());
 
 app.Run();
