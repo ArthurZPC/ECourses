@@ -9,7 +9,6 @@ namespace ECourses.ApplicationCore.Common.Interfaces.Services
 {
     public interface IRatingService
     {
-        Task<IEnumerable<RatingViewModel>> GetAllRatings();
         Task<RatingViewModel> GetRatingById(Guid id);
         Task Create(CreateRatingViewModel model);
         Task Delete(Guid id);

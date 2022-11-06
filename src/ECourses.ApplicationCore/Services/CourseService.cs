@@ -62,13 +62,6 @@ namespace ECourses.ApplicationCore.Services
             await _courseRepository.Delete(id);
         }
 
-        public async Task<IEnumerable<CourseViewModel>> GetAllCourses()
-        {
-            var courses = await _courseRepository.GetAll();
-
-            return courses.Select(c => _courseConverter.ConvertToViewModel(c)).ToList();
-        }
-
         public async Task<CourseViewModel> GetCourseById(Guid id)
         {
             var course = await _courseRepository.GetById(id);

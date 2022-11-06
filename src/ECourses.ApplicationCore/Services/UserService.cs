@@ -18,7 +18,6 @@ namespace ECourses.ApplicationCore.Services
         private readonly JwtOptions _jwtOptions;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
 
         public UserService(IOptions<JwtOptions> jwtOptions, 
             SignInManager<User> signInManager, 
@@ -28,7 +27,6 @@ namespace ECourses.ApplicationCore.Services
             _jwtOptions = jwtOptions.Value;
             _signInManager = signInManager;
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetAllUsersInRole(string role)

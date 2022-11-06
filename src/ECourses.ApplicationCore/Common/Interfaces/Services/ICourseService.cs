@@ -9,7 +9,6 @@ namespace ECourses.ApplicationCore.Common.Interfaces.Services
 {
     public interface ICourseService
     {
-        Task<IEnumerable<CourseViewModel>> GetAllCourses();
         Task<CourseViewModel> GetCourseById(Guid id);
         Task Create(CreateCourseViewModel model);
         Task Delete(Guid id);

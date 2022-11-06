@@ -63,13 +63,6 @@ namespace ECourses.ApplicationCore.Services
             await _ratingRepository.Delete(id);
         }
 
-        public async Task<IEnumerable<RatingViewModel>> GetAllRatings()
-        {
-            var ratings = await _ratingRepository.GetAll();
-
-            return ratings.Select(r => _ratingConverter.ConvertToViewModel(r)).ToList();
-        }
-
         public async Task<RatingViewModel> GetRatingById(Guid id)
         {
             var rating = await _ratingRepository.GetById(id);

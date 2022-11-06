@@ -53,13 +53,6 @@ namespace ECourses.ApplicationCore.Services
             await _categoryRepository.Delete(id);
         }
 
-        public async Task<IEnumerable<CategoryViewModel>> GetAllCategories()
-        {
-            var categories = await _categoryRepository.GetAll();
-
-            return categories.Select(c => _categoryConverter.ConvertToViewModel(c)).ToList();
-        }
-
         public async Task<CategoryViewModel> GetCategoryById(Guid id)
         {
             var category = await _categoryRepository.GetById(id);

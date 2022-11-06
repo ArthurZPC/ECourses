@@ -9,7 +9,6 @@ namespace ECourses.ApplicationCore.Common.Interfaces.Services
 {
     public interface IAuthorService
     {
-        Task<IEnumerable<AuthorViewModel>> GetAllAuthors();
         Task<AuthorViewModel> GetAuthorById(Guid id);
         Task Create(CreateAuthorViewModel model);
         Task Delete(Guid id);

@@ -9,7 +9,6 @@ namespace ECourses.ApplicationCore.Common.Interfaces.Services
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<CategoryViewModel>> GetAllCategories();
         Task<CategoryViewModel> GetCategoryById(Guid id);
         Task Create(CreateCategoryViewModel model);
         Task Delete(Guid id);

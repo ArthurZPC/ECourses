@@ -14,7 +14,6 @@ using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Common.QueryOptions;
 using ECourses.Data.Entities;
 using ECourses.Data.Identity;
-using Microsoft.AspNetCore.Identity;
 
 namespace ECourses.ApplicationCore.Services
 {
@@ -59,13 +58,6 @@ namespace ECourses.ApplicationCore.Services
             await _authorEntityValidator.ValidateIfEntityNotFoundByCondition(a => a.Id == id);
 
             await _authorRepository.Delete(id);
-        }
-
-        public async Task<IEnumerable<AuthorViewModel>> GetAllAuthors()
-        {
-            var authors = await _authorRepository.GetAll();
-
-            return authors.Select(a => _authorConverter.ConvertToViewModel(a)).ToList();
         }
 
         public async Task<AuthorViewModel> GetAuthorById(Guid id)

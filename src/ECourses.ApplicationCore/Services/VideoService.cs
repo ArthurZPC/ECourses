@@ -70,13 +70,6 @@ namespace ECourses.ApplicationCore.Services
             await _videoRepository.Delete(id);
         }
 
-        public async Task<IEnumerable<VideoViewModel>> GetAllVideos()
-        {
-            var videos = await _videoRepository.GetAll();
-
-            return videos.Select(v => _videoConverter.ConvertToViewModel(v)).ToList();
-        }
-
         public async Task<PagedListModel<VideoViewModel>> GetPagedList(PaginationQuery pagination, string? orderField, VideoFilterQuery? filter)
         {
             var paginationOptions = new PaginationOptions

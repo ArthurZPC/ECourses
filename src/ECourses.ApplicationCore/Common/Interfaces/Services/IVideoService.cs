@@ -9,7 +9,6 @@ namespace ECourses.ApplicationCore.Common.Interfaces.Services
 {
     public interface IVideoService
     {
-        Task<IEnumerable<VideoViewModel>> GetAllVideos();
         Task<VideoViewModel> GetVideoById(Guid id);
         Task Create(CreateVideoViewModel model);
         Task Delete(Guid id);

@@ -53,13 +53,6 @@ namespace ECourses.ApplicationCore.Services
             await _tagRepository.Delete(id);
         }
 
-        public async Task<IEnumerable<TagViewModel>> GetAllTags()
-        {
-            var tags = await _tagRepository.GetAll();
-
-            return tags.Select(t => _tagConverter.ConvertToViewModel(t)).ToList();
-        }
-
         public async Task<TagViewModel> GetTagById(Guid id)
         {
             var tag = await _tagRepository.GetById(id);

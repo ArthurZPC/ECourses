@@ -9,7 +9,6 @@ namespace ECourses.ApplicationCore.Common.Interfaces.Services
 {
     public interface ITagService
     {
-        Task<IEnumerable<TagViewModel>> GetAllTags();
         Task<TagViewModel> GetTagById(Guid id);
         Task Create(CreateTagViewModel model);
         Task Delete(Guid id);
