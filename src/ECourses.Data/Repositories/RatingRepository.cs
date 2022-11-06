@@ -3,6 +3,7 @@ using ECourses.Data.Common.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Common.QueryOptions;
 using ECourses.Data.Entities;
+using ECourses.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -33,23 +34,14 @@ namespace ECourses.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Rating>> GetAll()
-        {
-            return await _context.Ratings
-                .Include(r => r.Course)
-                .Include(r => r.User)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Rating>> GetByCondition(Expression<Func<Rating, bool>> predicate)
+        public async Task<PagedList<Rating>> GetByCondition(Expression<Func<Rating, bool>> predicate, PaginationOptions? paginationOptions = default)
         {
             return await _context.Ratings
                 .Include(r => r.Course)
                 .Include(r => r.User)
                 .AsNoTracking()
                 .Where(predicate)
-                .ToListAsync();
+                .ToPagedListAsync(paginationOptions);
         }
 
         public async Task<Rating?> GetById(Guid id)
@@ -61,7 +53,7 @@ namespace ECourses.Data.Repositories
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task<PagedList<Rating>> GetPagedList(PaginationOptions paginationOptions, FilterOptions<Rating>? filterOptions = null, OrderOptions<Rating>? orderOptions = null)
+        public async Task<PagedList<Rating>> GetPagedList(PaginationOptions? paginationOptions = default, FilterOptions<Rating>? filterOptions = null, OrderOptions<Rating>? orderOptions = null)
         {
             var query = _context.Ratings
                 .Include(r => r.Course)
@@ -82,18 +74,7 @@ namespace ECourses.Data.Repositories
                     : query.OrderByDescending(selector);
             }
 
-            var count = paginationOptions.PageSize;
-            var offset = paginationOptions.PageNumber;
-
-            var totalCount = await query.CountAsync();
-
-            var items = await query.Skip(count * offset - count).Take(count).ToListAsync();
-
-            return new PagedList<Rating>
-            {
-                Count = totalCount,
-                Items = items
-            };
+            return await query.ToPagedListAsync(paginationOptions);
         }
 
         public async Task Update(Rating entity)

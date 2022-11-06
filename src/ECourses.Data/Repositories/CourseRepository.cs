@@ -3,6 +3,7 @@ using ECourses.Data.Common.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Common.QueryOptions;
 using ECourses.Data.Entities;
+using ECourses.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -33,17 +34,7 @@ namespace ECourses.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Course>> GetAll()
-        {
-            return await _context.Courses
-                .Include(c => c.Author)
-                .ThenInclude(a => a.User)
-                .Include(c => c.Category)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Course>> GetByCondition(Expression<Func<Course, bool>> predicate)
+        public async Task<PagedList<Course>> GetByCondition(Expression<Func<Course, bool>> predicate, PaginationOptions? paginationOptions = default)
         {
             return await _context.Courses
                 .Include(c => c.Author)
@@ -51,7 +42,7 @@ namespace ECourses.Data.Repositories
                 .Include(c => c.Category)
                 .AsNoTracking()
                 .Where(predicate)
-                .ToListAsync();
+                .ToPagedListAsync(paginationOptions);
 
         }
 
@@ -65,7 +56,7 @@ namespace ECourses.Data.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<PagedList<Course>> GetPagedList(PaginationOptions paginationOptions, FilterOptions<Course>? filterOptions = null, OrderOptions<Course>? orderOptions = null)
+        public async Task<PagedList<Course>> GetPagedList(PaginationOptions? paginationOptions = default, FilterOptions<Course>? filterOptions = null, OrderOptions<Course>? orderOptions = null)
         {
             var query = _context.Courses
                 .Include(c => c.Author)
@@ -87,18 +78,7 @@ namespace ECourses.Data.Repositories
                     : query.OrderByDescending(selector);
             }
 
-            var count = paginationOptions.PageSize;
-            var offset = paginationOptions.PageNumber;
-
-            var totalCount = await query.CountAsync();
-
-            var items = await query.Skip(count * offset - count).Take(count).ToListAsync();
-
-            return new PagedList<Course>
-            {
-                Count = totalCount,
-                Items = items
-            };
+            return await query.ToPagedListAsync(paginationOptions);
         }
 
         public async Task Update(Course entity)
