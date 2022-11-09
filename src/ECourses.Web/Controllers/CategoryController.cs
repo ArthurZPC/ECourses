@@ -1,10 +1,12 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Features.Queries.Categories;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.ApplicationCore.WebQueries;
 using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECourses.Web.Controllers
@@ -15,20 +17,14 @@ namespace ECourses.Web.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly IMediator _mediator;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, IMediator mediator)
         {
             _categoryService = categoryService;
+            _mediator = mediator;
         }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll()
-        {
-            var categories = await _categoryService.GetAllCategories();
-
-            return Ok(categories);
-        }
 
         [HttpGet("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -76,9 +72,9 @@ namespace ECourses.Web.Controllers
 
         [HttpGet("Paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllPaged([FromQuery] PaginationQuery paginationQuery, string? order, [FromQuery] CategoryFilterQuery filterQuery)
+        public async Task<IActionResult> GetAllPaged([FromQuery] GetAllCategoriesPagedQuery query)
         {
-            var categories = await _categoryService.GetPagedList(paginationQuery, order, filterQuery);
+            var categories = await _mediator.Send(query);
 
             return Ok(categories);
         }

@@ -1,10 +1,12 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Features.Queries.Courses;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.ApplicationCore.WebQueries;
 using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECourses.Web.Controllers
@@ -15,19 +17,12 @@ namespace ECourses.Web.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
+        private readonly IMediator _mediator;
 
-        public CourseController(ICourseService courseService)
+        public CourseController(ICourseService courseService, IMediator mediator)
         {
             _courseService = courseService;
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll()
-        {
-            var courses = await _courseService.GetAllCourses();
-
-            return Ok(courses);
+            _mediator = mediator;
         }
 
         [HttpGet("{id:Guid}")]
@@ -76,9 +71,9 @@ namespace ECourses.Web.Controllers
 
         [HttpGet("Paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllPaged([FromQuery] PaginationQuery paginationQuery, string? order, [FromQuery] CourseFilterQuery? filterQuery)
+        public async Task<IActionResult> GetAllPaged([FromQuery] GetAllCoursesPagedQuery query)
         {
-            var courses = await _courseService.GetPagedList(paginationQuery, order, filterQuery);
+            var courses = await _mediator.Send(query);
 
             return Ok(courses);
         }

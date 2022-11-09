@@ -1,10 +1,10 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Features.Queries.Ratings;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
-using ECourses.ApplicationCore.WebQueries;
-using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECourses.Web.Controllers
@@ -15,19 +15,12 @@ namespace ECourses.Web.Controllers
     public class RatingController : ControllerBase
     {
         private readonly IRatingService _ratingService;
+        private readonly IMediator _mediator;
 
-        public RatingController(IRatingService ratingService)
+        public RatingController(IRatingService ratingService, IMediator mediator)
         {
             _ratingService = ratingService;
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll()
-        {
-            var ratings = await _ratingService.GetAllRatings();
-
-            return Ok(ratings);
+            _mediator = mediator;
         }
 
         [HttpGet("{id:Guid}")]
@@ -76,9 +69,9 @@ namespace ECourses.Web.Controllers
 
         [HttpGet("Paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllPaged([FromQuery] PaginationQuery paginationQuery, string? order, [FromQuery] RatingFilterQuery filterQuery)
+        public async Task<IActionResult> GetAllPaged([FromQuery] GetAllRatingsPagedQuery query)
         {
-            var ratings = await _ratingService.GetPagedList(paginationQuery, order, filterQuery);
+            var ratings = await _mediator.Send(query);
 
             return Ok(ratings);
         }

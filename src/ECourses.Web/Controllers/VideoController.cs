@@ -1,10 +1,12 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Features.Queries.Videos;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.ApplicationCore.WebQueries;
 using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECourses.Web.Controllers
@@ -15,19 +17,12 @@ namespace ECourses.Web.Controllers
     public class VideoController : ControllerBase
     {
         private readonly IVideoService _videoService;
+        private readonly IMediator _mediator;
 
-        public VideoController(IVideoService videoService)
+        public VideoController(IVideoService videoService, IMediator mediator)
         {
             _videoService = videoService;
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll()
-        {
-            var videos = await _videoService.GetAllVideos();
-
-            return Ok(videos);
+            _mediator = mediator;
         }
 
         [HttpGet("{id:Guid}")]
@@ -76,9 +71,9 @@ namespace ECourses.Web.Controllers
 
         [HttpGet("Paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllPaged([FromQuery] PaginationQuery paginationQuery, string? order, [FromQuery] VideoFilterQuery filterQuery)
+        public async Task<IActionResult> GetAllPaged([FromQuery] GetAllVideosPagedQuery query)
         {
-            var videos = await _videoService.GetPagedList(paginationQuery, order, filterQuery);
+            var videos = await _mediator.Send(query);
 
             return Ok(videos);
         }

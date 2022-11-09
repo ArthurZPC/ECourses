@@ -1,10 +1,12 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Features.Queries.Authors;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.ApplicationCore.WebQueries;
 using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECourses.Web.Controllers
@@ -15,19 +17,12 @@ namespace ECourses.Web.Controllers
     public class AuthorController : ControllerBase
     {
         private readonly IAuthorService _authorService;
+        private readonly IMediator _mediator;
 
-        public AuthorController(IAuthorService authorService)
+        public AuthorController(IAuthorService authorService, IMediator mediator)
         {
             _authorService = authorService;
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll()
-        {
-            var authors = await _authorService.GetAllAuthors();
-
-            return Ok(authors);
+            _mediator = mediator;
         }
 
         [HttpGet("{id:Guid}")]
@@ -76,9 +71,9 @@ namespace ECourses.Web.Controllers
 
         [HttpGet("Paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllPaged([FromQuery] PaginationQuery paginationQuery, string? order, [FromQuery] AuthorFilterQuery? filterQuery)
+        public async Task<IActionResult> GetAllPaged([FromQuery] GetAllAuthorsPagedQuery query)
         {
-            var authors = await _authorService.GetPagedList(paginationQuery, order, filterQuery);
+            var authors = await _mediator.Send(query);
 
             return Ok(authors);
         }

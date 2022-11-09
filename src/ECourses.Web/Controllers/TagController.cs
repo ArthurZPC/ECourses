@@ -1,10 +1,12 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Features.Queries.Tags;
 using ECourses.ApplicationCore.ViewModels.CreateViewModels;
 using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.ApplicationCore.WebQueries;
 using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECourses.Web.Controllers
@@ -15,19 +17,12 @@ namespace ECourses.Web.Controllers
     public class TagController : ControllerBase
     {
         private readonly ITagService _tagService;
+        private readonly IMediator _mediator;
 
-        public TagController(ITagService tagService)
+        public TagController(ITagService tagService, IMediator mediator)
         {
             _tagService = tagService;
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll()
-        {
-            var tags = await _tagService.GetAllTags();
-
-            return Ok(tags);
+            _mediator = mediator;
         }
 
         [HttpGet("{id:Guid}")]
@@ -76,9 +71,9 @@ namespace ECourses.Web.Controllers
 
         [HttpGet("Paged")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllPaged([FromQuery] PaginationQuery paginationQuery, string? order, [FromQuery] TagFilterQuery filterQuery)
+        public async Task<IActionResult> GetAllPaged([FromQuery] GetAllTagsPagedQuery query)
         {
-            var tags = await _tagService.GetPagedList(paginationQuery, order, filterQuery);
+            var tags = await _mediator.Send(query);
 
             return Ok(tags);
         }
