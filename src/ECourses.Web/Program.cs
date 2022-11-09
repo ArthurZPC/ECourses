@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,9 +71,11 @@ builder.Services
     })
     .AddControllers();
 
-    builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddJwtAuthentication(jwtKeyBytes);
+
+builder.Services.AddMediatR(typeof(JwtOptions).Assembly);
 
 var app = builder.Build();
 

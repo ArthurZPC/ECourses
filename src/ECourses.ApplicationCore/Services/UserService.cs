@@ -4,7 +4,6 @@ using ECourses.ApplicationCore.Models;
 using ECourses.ApplicationCore.ViewModels;
 using ECourses.Data.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,8 +20,7 @@ namespace ECourses.ApplicationCore.Services
 
         public UserService(IOptions<JwtOptions> jwtOptions, 
             SignInManager<User> signInManager, 
-            UserManager<User> userManager,
-            RoleManager<Role> roleManager)
+            UserManager<User> userManager)
         {
             _jwtOptions = jwtOptions.Value;
             _signInManager = signInManager;
