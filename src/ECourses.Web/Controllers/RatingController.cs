@@ -28,7 +28,7 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var rating = await _ratingService.GetRatingById(id);
+            var rating = await _mediator.Send(new GetRatingQuery { Id = id });
 
             return Ok(rating);
         }

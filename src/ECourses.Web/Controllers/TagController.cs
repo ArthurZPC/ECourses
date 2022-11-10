@@ -30,7 +30,7 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var tag = await _tagService.GetTagById(id);
+            var tag = await _mediator.Send(new GetTagQuery { Id = id });
 
             return Ok(tag);
         }

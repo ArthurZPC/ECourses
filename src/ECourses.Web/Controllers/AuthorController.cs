@@ -30,7 +30,7 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var author = await _authorService.GetAuthorById(id);
+            var author = await _mediator.Send(new GetAuthorQuery() { Id = id });
 
             return Ok(author);
         }

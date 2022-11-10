@@ -30,7 +30,7 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var video = await _videoService.GetVideoById(id);
+            var video = await _mediator.Send(new GetVideoQuery { Id = id });
 
             return Ok(video);
         }
