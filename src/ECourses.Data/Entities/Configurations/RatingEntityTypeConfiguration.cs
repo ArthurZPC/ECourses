@@ -11,7 +11,7 @@ namespace ECourses.Data.Entities.Configurations
             builder.HasIndex(r => new { r.CourseId, r.UserId })
                 .IsUnique();
 
-            builder.HasOne<User>(r => r.User)
+            builder.HasOne(r => r.User)
                 .WithMany(u => u.Ratings)
                 .OnDelete(DeleteBehavior.NoAction);
 
