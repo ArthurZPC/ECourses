@@ -80,8 +80,8 @@ namespace ECourses.Data.Repositories
         {
             var author = await _context.Authors.FirstAsync(a => a.Id == entity.Id);
 
-            author.FirstName = entity.FirstName != "" ? entity.FirstName : author.FirstName;
-            author.LastName = entity.LastName != "" ? entity.LastName : author.LastName;
+            author.FirstName = !string.IsNullOrEmpty(entity.FirstName) ? entity.FirstName : author.FirstName;
+            author.LastName = !string.IsNullOrEmpty(entity.LastName) ? entity.LastName : author.LastName;
             author.UserId = entity.UserId != Guid.Empty ? entity.UserId : author.UserId;
 
             await _context.SaveChangesAsync();

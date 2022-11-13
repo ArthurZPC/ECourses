@@ -78,8 +78,8 @@ namespace ECourses.Data.Repositories
         {
             var video = await _context.Videos.FirstAsync(v => v.Id == entity.Id);
 
-            video.Title = entity.Title != "" ? entity.Title : video.Title;
-            video.Url = entity.Url != "" ? entity.Url : video.Url;
+            video.Title = !string.IsNullOrEmpty(entity.Title) ? entity.Title : video.Title;
+            video.Url = !string.IsNullOrEmpty(entity.Url) ? entity.Url : video.Url;
             video.CourseId = entity.CourseId != Guid.Empty ? entity.CourseId : video.CourseId;
 
             await _context.SaveChangesAsync();

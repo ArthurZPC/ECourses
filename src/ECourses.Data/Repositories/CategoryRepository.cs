@@ -76,7 +76,7 @@ namespace ECourses.Data.Repositories
         {
             var category = await _context.Categories.FirstAsync(a => a.Id == entity.Id);
 
-            category.Title = entity.Title != "" ? entity.Title : category.Title;
+            category.Title = !string.IsNullOrEmpty(entity.Title) ? entity.Title : category.Title;
 
             await _context.SaveChangesAsync();
         }
