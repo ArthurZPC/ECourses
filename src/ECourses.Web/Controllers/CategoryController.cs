@@ -1,9 +1,5 @@
-﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+﻿using ECourses.ApplicationCore.Features.Commands.Categories;
 using ECourses.ApplicationCore.Features.Queries.Categories;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
-using ECourses.ApplicationCore.WebQueries;
-using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
 using MediatR;
@@ -16,12 +12,10 @@ namespace ECourses.Web.Controllers
     [ProducesErrorResponseType(typeof(ErrorDetails))]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
         private readonly IMediator _mediator;
 
-        public CategoryController(ICategoryService categoryService, IMediator mediator)
+        public CategoryController(IMediator mediator)
         {
-            _categoryService = categoryService;
             _mediator = mediator;
         }
 
@@ -40,11 +34,11 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create(CreateCategoryViewModel model)
+        public async Task<IActionResult> Create(CreateCategoryCommand command)
         {
-            await _categoryService.Create(model);
+            await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(Create), model);
+            return CreatedAtAction(nameof(Create), command);
         }
 
         [HttpDelete("{id:Guid}")]
@@ -53,7 +47,7 @@ namespace ECourses.Web.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _categoryService.Delete(id);
+            await _mediator.Send(new DeleteCategoryCommand { Id = id });
 
             return NoContent();
         }
@@ -63,11 +57,11 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Update(UpdateCategoryViewModel model)
+        public async Task<IActionResult> Update(UpdateCategoryCommand command)
         {
-            await _categoryService.Update(model);
+            await _mediator.Send(command);
 
-            return Ok(model);
+            return Ok(command);
         }
 
         [HttpGet("Paged")]

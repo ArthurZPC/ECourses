@@ -1,7 +1,5 @@
-﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+﻿using ECourses.ApplicationCore.Features.Commands.Ratings;
 using ECourses.ApplicationCore.Features.Queries.Ratings;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
 using MediatR;
@@ -14,12 +12,10 @@ namespace ECourses.Web.Controllers
     [ProducesErrorResponseType(typeof(ErrorDetails))]
     public class RatingController : ControllerBase
     {
-        private readonly IRatingService _ratingService;
         private readonly IMediator _mediator;
 
-        public RatingController(IRatingService ratingService, IMediator mediator)
+        public RatingController(IMediator mediator)
         {
-            _ratingService = ratingService;
             _mediator = mediator;
         }
 
@@ -37,11 +33,11 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create(CreateRatingViewModel model)
+        public async Task<IActionResult> Create(CreateRatingCommand command)
         {
-            await _ratingService.Create(model);
+            await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(Create), model);
+            return CreatedAtAction(nameof(Create), command);
         }
 
         [HttpDelete("{id:Guid}")]
@@ -50,7 +46,7 @@ namespace ECourses.Web.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _ratingService.Delete(id);
+            await _mediator.Send(new DeleteRatingCommand { Id = id });
 
             return NoContent();
         }
@@ -60,11 +56,11 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Update(UpdateRatingViewModel model)
+        public async Task<IActionResult> Update(UpdateRatingCommand command)
         {
-            await _ratingService.Update(model);
+            await _mediator.Send(command);
 
-            return Ok(model);
+            return Ok(command);
         }
 
         [HttpGet("Paged")]

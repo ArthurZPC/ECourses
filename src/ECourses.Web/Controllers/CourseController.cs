@@ -1,9 +1,5 @@
-﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+﻿using ECourses.ApplicationCore.Features.Commands.Courses;
 using ECourses.ApplicationCore.Features.Queries.Courses;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
-using ECourses.ApplicationCore.WebQueries;
-using ECourses.ApplicationCore.WebQueries.Filters;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
 using MediatR;
@@ -16,12 +12,10 @@ namespace ECourses.Web.Controllers
     [ProducesErrorResponseType(typeof(ErrorDetails))]
     public class CourseController : ControllerBase
     {
-        private readonly ICourseService _courseService;
         private readonly IMediator _mediator;
 
-        public CourseController(ICourseService courseService, IMediator mediator)
+        public CourseController(IMediator mediator)
         {
-            _courseService = courseService;
             _mediator = mediator;
         }
 
@@ -39,11 +33,11 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create(CreateCourseViewModel model)
+        public async Task<IActionResult> Create(CreateCourseCommand command)
         {
-            await _courseService.Create(model);
+            await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(Create), model);
+            return CreatedAtAction(nameof(Create), command);
         }
 
         [HttpDelete("{id:Guid}")]
@@ -52,7 +46,7 @@ namespace ECourses.Web.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _courseService.Delete(id);
+            await _mediator.Send(new DeleteCourseCommand { Id = id });
 
             return NoContent();
         }
@@ -62,11 +56,11 @@ namespace ECourses.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Update(UpdateCourseViewModel model)
+        public async Task<IActionResult> Update(UpdateCourseCommand command)
         {
-            await _courseService.Update(model);
+            await _mediator.Send(command);
 
-            return Ok(model);
+            return Ok(command);
         }
 
         [HttpGet("Paged")]
