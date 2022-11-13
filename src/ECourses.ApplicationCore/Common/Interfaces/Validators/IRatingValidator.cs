@@ -1,11 +1,10 @@
-﻿using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+﻿using ECourses.ApplicationCore.Features.Commands.Ratings;
 
 namespace ECourses.ApplicationCore.Common.Interfaces.Validators
 {
     public interface IRatingValidator
     {
-        void ValidateCreateRatingViewModel(CreateRatingViewModel model);
-        void ValidateUpdateRatingViewModel(UpdateRatingViewModel model);
+        void ValidateCreateRatingCommand(CreateRatingCommand command);
+        void ValidateUpdateRatingCommand(UpdateRatingCommand command);
     }
 }

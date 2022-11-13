@@ -1,7 +1,6 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
+using ECourses.ApplicationCore.Features.Commands.Courses;
 using ECourses.ApplicationCore.ViewModels;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Data.Entities;
 
 namespace ECourses.ApplicationCore.Converters
@@ -22,30 +21,30 @@ namespace ECourses.ApplicationCore.Converters
             };
         }
 
-        public Course ConvertToCourse(CreateCourseViewModel model)
+        public Course ConvertToCourse(CreateCourseCommand command)
         {
             return new Course
             {
-                Title = model.Title,
-                Description = model.Description,
-                PublishedAt = model.PublishedAt,
-                AuthorId = model.AuthorId,
-                CategoryId = model.CategoryId,
-                Price = model.Price
+                Title = command.Title,
+                Description = command.Description,
+                PublishedAt = command.PublishedAt,
+                AuthorId = command.AuthorId,
+                CategoryId = command.CategoryId,
+                Price = command.Price
             };
         }
 
-        public Course ConvertToCourse(UpdateCourseViewModel model)
+        public Course ConvertToCourse(UpdateCourseCommand command)
         {
             return new Course
             {
-                Id = model.Id,
-                Title = model.Title,
-                Description = model.Description,
-                PublishedAt = model.PublishedAt ?? DateTime.Now,
-                AuthorId = model.AuthorId,
-                CategoryId = model.CategoryId,
-                Price = model.Price ?? 0
+                Id = command.Id,
+                Title = command.Title,
+                Description = command.Description,
+                PublishedAt = command.PublishedAt,
+                AuthorId = command.AuthorId,
+                CategoryId = command.CategoryId,
+                Price = command.Price
             };
         }
 

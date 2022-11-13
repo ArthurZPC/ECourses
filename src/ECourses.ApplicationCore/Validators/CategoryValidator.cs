@@ -1,39 +1,35 @@
 ﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.ApplicationCore.Extensions;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
-using ECourses.Data.Common.Interfaces.Repositories;
-using ECourses.Data.Entities;
-using System.Linq.Expressions;
+using ECourses.ApplicationCore.Features.Commands.Categories;
 
 namespace ECourses.ApplicationCore.Validators
 {
     public class CategoryValidator : ICategoryValidator
     {
-        public void ValidateCreateCategoryViewModel(CreateCategoryViewModel model)
+        public void ValidateCreateCategoryCommand(CreateCategoryCommand command)
         {
-            if (model is null) 
+            if (command is null) 
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateCategoryViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateCategoryCommand).Name));
             }
 
-            if (string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(command.Title))
             {            
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.Title)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.Title)));
             }
         }
 
-        public void ValidateUpdateCategoryViewModel(UpdateCategoryViewModel model)
+        public void ValidateUpdateCategoryCommand(UpdateCategoryCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ArgumentNullException(nameof(model), Resources.Common.Validation_Null.F(typeof(UpdateCategoryViewModel).Name));
+                throw new ArgumentNullException(nameof(command), Resources.Common.Validation_Null.F(typeof(UpdateCategoryCommand).Name));
             }
 
-            if (string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(command.Title))
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.Title)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.Title)));
             }
         }
     }

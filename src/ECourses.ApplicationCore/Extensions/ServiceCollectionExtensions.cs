@@ -77,13 +77,8 @@ namespace ECourses.ApplicationCore.Extensions
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<ITagService, TagService>();
-            services.AddScoped<IAuthorService, AuthorService>();
-            services.AddScoped<ICourseService, CourseService>();
-            services.AddScoped<IRatingService, RatingService>();
-            services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IFileService, FileService>();
 
             return services;
         }

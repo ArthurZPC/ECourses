@@ -1,41 +1,40 @@
 ﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+using ECourses.ApplicationCore.Features.Commands.Courses;
 
 namespace ECourses.ApplicationCore.Validators
 {
     public class CourseValidator : ICourseValidator
     {
-        public void ValidateCreateCourseViewModel(CreateCourseViewModel model)
+        public void ValidateCreateCourseCommand(CreateCourseCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateCourseViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateCourseCommand).Name));
             }
 
-            if (string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(command.Title))
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.Title)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.Title)));
             }
 
-            if (model.AuthorId == Guid.Empty)
+            if (command.AuthorId == Guid.Empty)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.AuthorId)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.AuthorId)));
             }
 
-            if (model.CategoryId == Guid.Empty)
+            if (command.CategoryId == Guid.Empty)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.CategoryId)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.CategoryId)));
             }
         }
 
-        public void ValidateUpdateCourseViewModel(UpdateCourseViewModel model)
+        public void ValidateUpdateCourseCommand(UpdateCourseCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateCourseViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(UpdateCourseCommand).Name));
             }
         }
     }

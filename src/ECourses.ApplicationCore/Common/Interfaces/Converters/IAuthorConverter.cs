@@ -1,6 +1,5 @@
-﻿using ECourses.ApplicationCore.ViewModels;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+﻿using ECourses.ApplicationCore.Features.Commands.Authors;
+using ECourses.ApplicationCore.ViewModels;
 using ECourses.Data.Entities;
 
 namespace ECourses.ApplicationCore.Common.Interfaces.Converters
@@ -8,8 +7,8 @@ namespace ECourses.ApplicationCore.Common.Interfaces.Converters
     public interface IAuthorConverter
     {
         Author ConvertToAuthor(AuthorViewModel model);
-        Author ConvertToAuthor(CreateAuthorViewModel model);
-        Author ConvertToAuthor(UpdateAuthorViewModel model);
+        Author ConvertToAuthor(CreateAuthorCommand command);
+        Author ConvertToAuthor(UpdateAuthorCommand command);
         AuthorViewModel ConvertToViewModel(Author model);
     }
 }

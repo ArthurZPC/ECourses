@@ -1,11 +1,10 @@
-﻿using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+﻿using ECourses.ApplicationCore.Features.Commands.Videos;
 
 namespace ECourses.ApplicationCore.Common.Interfaces.Validators
 {
     public interface IVideoValidator
     {
-        void ValidateCreateVideoViewModel(CreateVideoViewModel model);
-        void ValidateUpdateVideoViewModel(UpdateVideoViewModel model);
+        void ValidateCreateVideoCommand(CreateVideoCommand command);
+        void ValidateUpdateVideoCommand(UpdateVideoCommand command);
     }
 }

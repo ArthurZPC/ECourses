@@ -1,41 +1,40 @@
 ﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+using ECourses.ApplicationCore.Features.Commands.Authors;
 
 namespace ECourses.ApplicationCore.Validators
 {
     public class AuthorValidator : IAuthorValidator
     {
-        public void ValidateCreateAuthorViewModel(CreateAuthorViewModel model)
+        public void ValidateCreateAuthorCommand(CreateAuthorCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateAuthorViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateAuthorCommand).Name));
             }
 
-            if (string.IsNullOrEmpty(model.FirstName))
+            if (string.IsNullOrEmpty(command.FirstName))
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.FirstName)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.FirstName)));
             }
 
-            if (string.IsNullOrEmpty(model.LastName))
+            if (string.IsNullOrEmpty(command.LastName))
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.LastName)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.LastName)));
             }
 
-            if (model.UserId == Guid.Empty)
+            if (command.UserId == Guid.Empty)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.UserId)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.UserId)));
             }
         }
 
-        public void ValidateUpdateAuthorViewModel(UpdateAuthorViewModel model)
+        public void ValidateUpdateAuthorCommand(UpdateAuthorCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(UpdateAuthorViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(UpdateAuthorCommand).Name));
             }
         }
     }

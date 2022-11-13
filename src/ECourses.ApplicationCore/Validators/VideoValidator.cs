@@ -1,46 +1,45 @@
 ﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+using ECourses.ApplicationCore.Features.Commands.Videos;
 
 namespace ECourses.ApplicationCore.Validators
 {
     public class VideoValidator : IVideoValidator
     {
-        public void ValidateCreateVideoViewModel(CreateVideoViewModel model)
+        public void ValidateCreateVideoCommand(CreateVideoCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateVideoViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateVideoCommand).Name));
             }
 
-            if (model.Video is null)
+            if (command.Video is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.Video)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.Video)));
             }
 
-            if (string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(command.Title))
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.Title)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.Title)));
             }
 
-            if (model.CourseId == Guid.Empty)
+            if (command.CourseId == Guid.Empty)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.CourseId)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.CourseId)));
             }
         }
 
-        public void ValidateUpdateVideoViewModel(UpdateVideoViewModel model)
+        public void ValidateUpdateVideoCommand(UpdateVideoCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(UpdateVideoViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(UpdateVideoCommand).Name));
             }
 
-            if (string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(command.Title))
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.Title)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.Title)));
             }
         }
     }

@@ -1,36 +1,35 @@
 ﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+using ECourses.ApplicationCore.Features.Commands.Ratings;
 
 namespace ECourses.ApplicationCore.Validators
 {
     public class RatingValidator : IRatingValidator
     {
-        public void ValidateCreateRatingViewModel(CreateRatingViewModel model)
+        public void ValidateCreateRatingCommand(CreateRatingCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateRatingViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateRatingCommand).Name));
             }
 
-            if (model.CourseId == Guid.Empty)
+            if (command.CourseId == Guid.Empty)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.CourseId)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.CourseId)));
             }
 
-            if (model.UserId == Guid.Empty)
+            if (command.UserId == Guid.Empty)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.UserId)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.UserId)));
             }
         }
 
-        public void ValidateUpdateRatingViewModel(UpdateRatingViewModel model)
+        public void ValidateUpdateRatingCommand(UpdateRatingCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(UpdateRatingViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(UpdateRatingCommand).Name));
             }
         }
     }

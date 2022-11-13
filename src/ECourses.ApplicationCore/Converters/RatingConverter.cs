@@ -1,7 +1,6 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
+using ECourses.ApplicationCore.Features.Commands.Ratings;
 using ECourses.ApplicationCore.ViewModels;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Data.Entities;
 
 namespace ECourses.ApplicationCore.Converters
@@ -19,24 +18,24 @@ namespace ECourses.ApplicationCore.Converters
             };
         }
 
-        public Rating ConvertToRating(CreateRatingViewModel model)
+        public Rating ConvertToRating(CreateRatingCommand command)
         {
             return new Rating
             {
-                Value = model.Value,
-                CourseId = model.CourseId,
-                UserId = model.UserId
+                Value = command.Value,
+                CourseId = command.CourseId,
+                UserId = command.UserId
             };
         }
 
-        public Rating ConvertToRating(UpdateRatingViewModel model)
+        public Rating ConvertToRating(UpdateRatingCommand command)
         {
             return new Rating
             {
-                Id = model.Id,
-                Value = model.Value ?? 0,
-                CourseId = model.CourseId,
-                UserId = model.UserId
+                Id = command.Id,
+                Value = command.Value,
+                CourseId = command.CourseId,
+                UserId = command.UserId
             };
         }
 

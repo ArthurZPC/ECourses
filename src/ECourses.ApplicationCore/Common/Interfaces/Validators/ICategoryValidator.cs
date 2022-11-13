@@ -1,13 +1,10 @@
-﻿using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
-using ECourses.Data.Entities;
-using System.Linq.Expressions;
+﻿using ECourses.ApplicationCore.Features.Commands.Categories;
 
 namespace ECourses.ApplicationCore.Common.Interfaces.Validators
 {
     public interface ICategoryValidator
     {
-        void ValidateCreateCategoryViewModel(CreateCategoryViewModel model);
-        void ValidateUpdateCategoryViewModel(UpdateCategoryViewModel model);
+        void ValidateCreateCategoryCommand(CreateCategoryCommand command);
+        void ValidateUpdateCategoryCommand(UpdateCategoryCommand command);
     }
 }

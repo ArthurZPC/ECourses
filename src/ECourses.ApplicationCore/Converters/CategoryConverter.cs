@@ -1,7 +1,6 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
+using ECourses.ApplicationCore.Features.Commands.Categories;
 using ECourses.ApplicationCore.ViewModels;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Data.Entities;
 
 namespace ECourses.ApplicationCore.Converters
@@ -17,20 +16,20 @@ namespace ECourses.ApplicationCore.Converters
             };
         }
 
-        public Category ConvertToCategory(CreateCategoryViewModel model)
+        public Category ConvertToCategory(CreateCategoryCommand command)
         {
             return new Category
             {
-                Title = model.Title,
+                Title = command.Title,
             };
         }
 
-        public Category ConvertToCategory(UpdateCategoryViewModel model)
+        public Category ConvertToCategory(UpdateCategoryCommand command)
         {
             return new Category
             {
-                Id = model.Id,
-                Title = model.Title
+                Id = command.Id,
+                Title = command.Title
             };
         }
 

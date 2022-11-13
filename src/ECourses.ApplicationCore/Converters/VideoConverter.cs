@@ -1,10 +1,8 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
+using ECourses.ApplicationCore.Features.Commands.Videos;
 using ECourses.ApplicationCore.Helpers;
 using ECourses.ApplicationCore.ViewModels;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Data.Entities;
-using Microsoft.AspNetCore.Http;
 
 namespace ECourses.ApplicationCore.Converters
 {
@@ -21,24 +19,24 @@ namespace ECourses.ApplicationCore.Converters
             };
         }
 
-        public Video ConvertToVideo(CreateVideoViewModel model)
+        public Video ConvertToVideo(CreateVideoCommand command)
         {
             return new Video
             {
-                Title = model.Title,
-                Url = FileNameGenerator.Generate(model.Video),
-                CourseId = model.CourseId
+                Title = command.Title,
+                Url = FileNameGenerator.Generate(command.Video),
+                CourseId = command.CourseId
             };
         }
 
-        public Video ConvertToVideo(UpdateVideoViewModel model)
+        public Video ConvertToVideo(UpdateVideoCommand command)
         {
             return new Video
             {
-                Id = model.Id,
-                Title = model.Title,
-                Url = FileNameGenerator.Generate(model.Video),
-                CourseId = model.CourseId
+                Id = command.Id,
+                Title = command.Title,
+                Url = command.NewUrl,
+                CourseId = command.CourseId
             };
         }
 

@@ -1,7 +1,6 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
+using ECourses.ApplicationCore.Features.Commands.Tags;
 using ECourses.ApplicationCore.ViewModels;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Data.Entities;
 
 namespace ECourses.ApplicationCore.Converters
@@ -17,20 +16,20 @@ namespace ECourses.ApplicationCore.Converters
             };
         }
 
-        public Tag ConvertToTag(CreateTagViewModel model)
+        public Tag ConvertToTag(CreateTagCommand command)
         {
             return new Tag
             {
-                Title = model.Title,
+                Title = command.Title,
             };
         }
 
-        public Tag ConvertToTag(UpdateTagViewModel model)
+        public Tag ConvertToTag(UpdateTagCommand command)
         {
             return new Tag
             {
-                Id = model.Id,
-                Title = model.Title,
+                Id = command.Id,
+                Title = command.Title,
             };
         }
 

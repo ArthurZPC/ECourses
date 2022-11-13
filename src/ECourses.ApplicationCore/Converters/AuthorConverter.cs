@@ -1,7 +1,6 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
+using ECourses.ApplicationCore.Features.Commands.Authors;
 using ECourses.ApplicationCore.ViewModels;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
 using ECourses.Data.Entities;
 
 namespace ECourses.ApplicationCore.Converters
@@ -19,24 +18,24 @@ namespace ECourses.ApplicationCore.Converters
             };
         }
 
-        public Author ConvertToAuthor(CreateAuthorViewModel model)
+        public Author ConvertToAuthor(CreateAuthorCommand command)
         {
             return new Author
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                UserId = model.UserId,
+                FirstName = command.FirstName,
+                LastName = command.LastName,
+                UserId = command.UserId,
             };
         }
 
-        public Author ConvertToAuthor(UpdateAuthorViewModel model)
+        public Author ConvertToAuthor(UpdateAuthorCommand command)
         {
             return new Author
             {
-                Id = model.Id,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                UserId = model.UserId,
+                Id = command.Id,
+                FirstName = command.FirstName,
+                LastName = command.LastName,
+                UserId = command.UserId,
             };
         }
 

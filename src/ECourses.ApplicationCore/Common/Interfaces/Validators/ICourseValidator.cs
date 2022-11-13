@@ -1,11 +1,10 @@
-﻿using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+﻿using ECourses.ApplicationCore.Features.Commands.Courses;
 
 namespace ECourses.ApplicationCore.Common.Interfaces.Validators
 {
     public interface ICourseValidator
     {
-        void ValidateCreateCourseViewModel(CreateCourseViewModel model);
-        void ValidateUpdateCourseViewModel(UpdateCourseViewModel model);
+        void ValidateCreateCourseCommand(CreateCourseCommand command);
+        void ValidateUpdateCourseCommand(UpdateCourseCommand command);
     }
 }

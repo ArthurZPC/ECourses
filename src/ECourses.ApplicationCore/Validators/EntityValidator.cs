@@ -2,7 +2,6 @@
 using ECourses.ApplicationCore.Extensions;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.Data;
-using ECourses.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

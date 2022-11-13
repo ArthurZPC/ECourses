@@ -1,36 +1,35 @@
 ﻿using ECourses.ApplicationCore.Common.Exceptions;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Extensions;
-using ECourses.ApplicationCore.ViewModels.CreateViewModels;
-using ECourses.ApplicationCore.ViewModels.UpdateViewModels;
+using ECourses.ApplicationCore.Features.Commands.Tags;
 
 namespace ECourses.ApplicationCore.Validators
 {
     public class TagValidator : ITagValidator
     {
-        public void ValidateCreateTagViewModel(CreateTagViewModel model)
+        public void ValidateCreateTagCommand(CreateTagCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateTagViewModel).Name));
+                throw new ViewModelValidationException(Resources.Common.Validation_Null.F(typeof(CreateTagCommand).Name));
             }
 
-            if (string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(command.Title))
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.Title)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.Title)));
             }
         }
 
-        public void ValidateUpdateTagViewModel(UpdateTagViewModel model)
+        public void ValidateUpdateTagCommand(UpdateTagCommand command)
         {
-            if (model is null)
+            if (command is null)
             {
-                throw new ArgumentNullException(nameof(model), Resources.Common.Validation_Null.F(typeof(UpdateTagViewModel).Name));
+                throw new ArgumentNullException(nameof(command), Resources.Common.Validation_Null.F(typeof(UpdateTagCommand).Name));
             }
 
-            if (string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(command.Title))
             {
-                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(model.Title)));
+                throw new ViewModelValidationException(Resources.Common.Validation_Required.F(nameof(command.Title)));
             }
         }
     }
