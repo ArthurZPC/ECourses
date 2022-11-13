@@ -83,7 +83,15 @@ namespace ECourses.Data.Repositories
 
         public async Task Update(Course entity)
         {
-            _context.Courses.Update(entity);
+            var course = await _context.Courses.FirstAsync(c => c.Id == entity.Id);
+
+            course.Title = entity.Title != "" ? entity.Title : course.Title;
+            course.Description = entity.Description != "" ? entity.Description : course.Description;
+            course.PublishedAt = entity.PublishedAt != null ? entity.PublishedAt : course.PublishedAt;
+            course.Price = entity.Price != null ? entity.Price : course.Price;
+            course.AuthorId = entity.AuthorId != Guid.Empty ? entity.AuthorId : course.AuthorId;
+            course.CategoryId = entity.CategoryId != Guid.Empty ? entity.CategoryId : course.CategoryId;
+
             await _context.SaveChangesAsync();
         }
     }

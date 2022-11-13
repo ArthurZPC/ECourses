@@ -79,7 +79,12 @@ namespace ECourses.Data.Repositories
 
         public async Task Update(Rating entity)
         {
-            _context.Ratings.Update(entity);
+            var rating = await _context.Ratings.FirstAsync(r => r.Id == entity.Id);
+
+            rating.Value = entity.Value != null ? entity.Value : rating.Value;
+            rating.CourseId = entity.CourseId != Guid.Empty ? entity.CourseId : rating.CourseId;
+            rating.UserId = entity.UserId != Guid.Empty ? entity.UserId : rating.UserId;
+
             await _context.SaveChangesAsync();
         }
     }

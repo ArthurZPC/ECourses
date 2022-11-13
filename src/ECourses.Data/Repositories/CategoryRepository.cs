@@ -74,7 +74,10 @@ namespace ECourses.Data.Repositories
 
         public async Task Update(Category entity)
         {
-            _context.Categories.Update(entity);
+            var category = await _context.Categories.FirstAsync(a => a.Id == entity.Id);
+
+            category.Title = entity.Title != "" ? entity.Title : category.Title;
+
             await _context.SaveChangesAsync();
         }
     }
