@@ -9,6 +9,9 @@ namespace ECourses.Data.Entities.Configurations
         {
             builder.HasIndex(c => c.Title)
                 .IsUnique();
+
+            builder.Property(c => c.PublishedAt).IsRequired();
+            builder.Property(c => c.Price).IsRequired();
         }
     }
 }

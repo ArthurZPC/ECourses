@@ -7,10 +7,10 @@ namespace ECourses.Data.Entities
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public DateTime PublishedAt { get; set; }
+        public DateTime? PublishedAt { get; set; }
 
         [Precision(12,2)]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         public Guid AuthorId { get; set; }
         public Author Author { get; set; } = default!;

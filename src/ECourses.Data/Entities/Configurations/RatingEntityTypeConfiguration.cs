@@ -14,6 +14,8 @@ namespace ECourses.Data.Entities.Configurations
             builder.HasOne<User>(r => r.User)
                 .WithMany(u => u.Ratings)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(r => r.Value).IsRequired();
                 
         }
     }

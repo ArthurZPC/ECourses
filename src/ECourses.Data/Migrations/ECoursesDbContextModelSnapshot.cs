@@ -34,7 +34,7 @@ namespace ECourses.Data.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("CourseTag");
+                    b.ToTable("CourseTag", (string)null);
                 });
 
             modelBuilder.Entity("ECourses.Data.Entities.Author", b =>
@@ -62,7 +62,7 @@ namespace ECourses.Data.Migrations
                     b.HasIndex("FirstName", "LastName")
                         .IsUnique();
 
-                    b.ToTable("Authors");
+                    b.ToTable("Authors", (string)null);
                 });
 
             modelBuilder.Entity("ECourses.Data.Entities.Category", b =>
@@ -80,7 +80,7 @@ namespace ECourses.Data.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("ECourses.Data.Entities.Course", b =>
@@ -119,7 +119,7 @@ namespace ECourses.Data.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("ECourses.Data.Entities.Rating", b =>
@@ -144,7 +144,7 @@ namespace ECourses.Data.Migrations
                     b.HasIndex("CourseId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("ECourses.Data.Entities.Tag", b =>
@@ -162,7 +162,7 @@ namespace ECourses.Data.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("ECourses.Data.Entities.Video", b =>
@@ -186,7 +186,7 @@ namespace ECourses.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Videos");
+                    b.ToTable("Videos", (string)null);
                 });
 
             modelBuilder.Entity("ECourses.Data.Identity.Role", b =>
