@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using MediatR;
+using ECourses.ApplicationCore.RabbitMQ.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 })
     .Configure<WebRootOptions>(x => x.WebRootLocation = builder.Configuration.GetValue<string>("WebRootLocation"))
-    .Configure<JwtOptions>(builder.Configuration.GetSection("JWT"));
+    .Configure<JwtOptions>(builder.Configuration.GetSection("JWT"))
+    .Configure<RabbitMQOptions>(builder.Configuration.GetSection("RabbitMQ"));
 
 builder.Services
     .AddStartupTasks()
