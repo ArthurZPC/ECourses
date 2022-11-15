@@ -1,5 +1,8 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
+using ECourses.ApplicationCore.RabbitMQ.Interfaces;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Entities;
 using ECourses.Data.Identity;
@@ -14,17 +17,20 @@ namespace ECourses.ApplicationCore.Features.Commands.Authors
         private readonly IEntityValidator<Author> _authorEntityValidator;
         private readonly IAuthorConverter _authorConverter;
         private readonly IEntityValidator<User> _userEntityValidator;
+        private readonly IRabbitMQService _rabbitMQService;
 
         public CreateAuthorCommandHandler(IAuthorRepository authorRepository, IAuthorValidator authorValidator, 
             IEntityValidator<Author> authorEntityValidator, 
             IAuthorConverter authorConverter, 
-            IEntityValidator<User> userEntityValidator)
+            IEntityValidator<User> userEntityValidator,
+            IRabbitMQService rabbitMQService)
         {
             _authorRepository = authorRepository;
             _authorValidator = authorValidator;
             _authorEntityValidator = authorEntityValidator;
             _authorConverter = authorConverter;
             _userEntityValidator = userEntityValidator;
+            _rabbitMQService = rabbitMQService;
         }
 
         public async Task<Unit> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
@@ -38,6 +44,10 @@ namespace ECourses.ApplicationCore.Features.Commands.Authors
             var author = _authorConverter.ConvertToAuthor(request);
 
             await _authorRepository.Create(author);
+
+            var loggingMessage = new CommandLoggingMessage<CreateAuthorCommand>(request, CommandType.Create, DateTime.Now);
+
+            _rabbitMQService.SendMessage(loggingMessage);
 
             return await Task.FromResult(Unit.Value);
         }

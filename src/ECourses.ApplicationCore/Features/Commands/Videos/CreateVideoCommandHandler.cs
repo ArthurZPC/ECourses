@@ -2,6 +2,9 @@
 using ECourses.ApplicationCore.Common.Interfaces.Converters;
 using ECourses.ApplicationCore.Common.Interfaces.Services;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
+using ECourses.ApplicationCore.RabbitMQ.Interfaces;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Entities;
 using MediatR;
@@ -17,12 +20,14 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
         private readonly IVideoConverter _videoConverter;
         private readonly IFileService _fileService;
         private readonly WebRootOptions _webRootOptions;
+        private readonly IRabbitMQService _rabbitMQService;
 
         public CreateVideoCommandHandler(IVideoRepository videoRepository, IVideoValidator videoValidator, 
             IEntityValidator<Course> courseEntityValidator, 
             IVideoConverter videoConverter, 
             IFileService fileService,
-            IOptions<WebRootOptions> webRootOptions)
+            IOptions<WebRootOptions> webRootOptions,
+            IRabbitMQService rabbitMQService)
         {
             _videoRepository = videoRepository;
             _videoValidator = videoValidator;
@@ -30,6 +35,7 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
             _videoConverter = videoConverter;
             _fileService = fileService;
             _webRootOptions = webRootOptions.Value;
+            _rabbitMQService = rabbitMQService;
         }
 
         public async Task<Unit> Handle(CreateVideoCommand request, CancellationToken cancellationToken)
@@ -43,6 +49,10 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
 
             await _fileService.UploadFormFileAsync(request.Video, fullPath);
             await _videoRepository.Create(video);
+
+            var loggingMessage = new CommandLoggingMessage<CreateVideoCommand>(request, CommandType.Create, DateTime.Now);
+
+            _rabbitMQService.SendMessage(loggingMessage);
 
             return await Task.FromResult(Unit.Value);
         }

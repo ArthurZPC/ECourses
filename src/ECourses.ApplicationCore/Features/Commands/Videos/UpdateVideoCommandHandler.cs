@@ -3,6 +3,9 @@ using ECourses.ApplicationCore.Common.Interfaces.Converters;
 using ECourses.ApplicationCore.Common.Interfaces.Services;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Helpers;
+using ECourses.ApplicationCore.RabbitMQ.Interfaces;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Entities;
 using MediatR;
@@ -19,6 +22,7 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
         private readonly IFileService _fileService;
         private readonly IVideoConverter _videoConverter;
         private readonly WebRootOptions _webRootOptions;
+        private readonly IRabbitMQService _rabbitMQService;
 
         public UpdateVideoCommandHandler(IVideoRepository videoRepository, 
             IVideoValidator videoValidator, 
@@ -26,7 +30,8 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
             IEntityValidator<Course> courseEntityValidator,
             IFileService fileService,
             IVideoConverter videoConverter,
-            IOptions<WebRootOptions> webRootOptions)
+            IOptions<WebRootOptions> webRootOptions,
+            IRabbitMQService rabbitMQService)
         {
             _videoRepository = videoRepository;
             _videoValidator = videoValidator;
@@ -35,6 +40,7 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
             _fileService = fileService;
             _videoConverter = videoConverter;
             _webRootOptions = webRootOptions.Value;
+            _rabbitMQService = rabbitMQService;
         }
 
         public async Task<Unit> Handle(UpdateVideoCommand request, CancellationToken cancellationToken)
@@ -80,6 +86,10 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
             var newVideo = _videoConverter.ConvertToVideo(request);
 
             await _videoRepository.Update(newVideo);
+
+            var loggingMessage = new CommandLoggingMessage<UpdateVideoCommand>(request, CommandType.Update, DateTime.Now);
+
+            _rabbitMQService.SendMessage(loggingMessage);
 
             return await Task.FromResult(Unit.Value);
         }

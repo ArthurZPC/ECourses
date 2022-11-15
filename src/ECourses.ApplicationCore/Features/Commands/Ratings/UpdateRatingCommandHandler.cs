@@ -1,5 +1,8 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
+using ECourses.ApplicationCore.RabbitMQ.Interfaces;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Entities;
 using ECourses.Data.Identity;
@@ -15,12 +18,14 @@ namespace ECourses.ApplicationCore.Features.Commands.Ratings
         private readonly IEntityValidator<User> _userEntityValidator;
         private readonly IEntityValidator<Course> _courseEntityValidator;
         private readonly IRatingConverter _ratingConverter;
+        private readonly IRabbitMQService _rabbitMQService;
 
         public UpdateRatingCommandHandler(IRatingRepository ratingRepository, IRatingValidator ratingValidator, 
             IEntityValidator<Rating> ratingEntityValidator, 
             IEntityValidator<User> userEntityValidator, 
             IEntityValidator<Course> courseValidator, 
-            IRatingConverter ratingConverter)
+            IRatingConverter ratingConverter,
+            IRabbitMQService rabbitMQService)
         {
             _ratingRepository = ratingRepository;
             _ratingValidator = ratingValidator;
@@ -28,6 +33,7 @@ namespace ECourses.ApplicationCore.Features.Commands.Ratings
             _userEntityValidator = userEntityValidator;
             _courseEntityValidator = courseValidator;
             _ratingConverter = ratingConverter;
+            _rabbitMQService = rabbitMQService;
         }
 
         public async Task<Unit> Handle(UpdateRatingCommand request, CancellationToken cancellationToken)
@@ -48,6 +54,10 @@ namespace ECourses.ApplicationCore.Features.Commands.Ratings
             var rating = _ratingConverter.ConvertToRating(request);
 
             await _ratingRepository.Update(rating);
+
+            var loggingMessage = new CommandLoggingMessage<UpdateRatingCommand>(request, CommandType.Create, DateTime.Now);
+
+            _rabbitMQService.SendMessage(loggingMessage);
 
             return await Task.FromResult(Unit.Value);
         }

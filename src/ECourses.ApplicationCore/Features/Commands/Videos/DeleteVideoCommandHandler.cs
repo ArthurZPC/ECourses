@@ -1,6 +1,9 @@
 ﻿using ECourses.ApplicationCore.Common.Configuration;
 using ECourses.ApplicationCore.Common.Interfaces.Services;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
+using ECourses.ApplicationCore.RabbitMQ.Interfaces;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Entities;
 using MediatR;
@@ -14,15 +17,18 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
         private readonly IEntityValidator<Video> _entityValidator;
         private readonly IFileService _fileService;
         private readonly WebRootOptions _webRootOptions;
+        private readonly IRabbitMQService _rabbitMQService;
 
         public DeleteVideoCommandHandler(IVideoRepository videoRepository, IEntityValidator<Video> entityValidator,
             IFileService fileService,
-            IOptions<WebRootOptions> webRootOptions)
+            IOptions<WebRootOptions> webRootOptions,
+            IRabbitMQService rabbitMQService)
         {
             _videoRepository = videoRepository;
             _entityValidator = entityValidator;
             _fileService = fileService;
             _webRootOptions = webRootOptions.Value;
+            _rabbitMQService = rabbitMQService;
         }
 
         public async Task<Unit> Handle(DeleteVideoCommand request, CancellationToken cancellationToken)
@@ -35,6 +41,10 @@ namespace ECourses.ApplicationCore.Features.Commands.Videos
 
             _fileService.Delete(savedVideoPath);
             await _videoRepository.Delete(request.Id);
+
+            var loggingMessage = new CommandLoggingMessage<DeleteVideoCommand>(request, CommandType.Delete, DateTime.Now);
+
+            _rabbitMQService.SendMessage(loggingMessage);
 
             return await Task.FromResult(Unit.Value);
         }

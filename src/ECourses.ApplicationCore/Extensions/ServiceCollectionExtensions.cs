@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using ECourses.ApplicationCore.Common.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using ECourses.ApplicationCore.RabbitMQ.Interfaces;
+using ECourses.ApplicationCore.RabbitMQ.Services;
 
 namespace ECourses.ApplicationCore.Extensions
 {
@@ -79,6 +81,8 @@ namespace ECourses.ApplicationCore.Extensions
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFileService, FileService>();
+
+            services.AddScoped<IRabbitMQService, RabbitMQService>();
 
             return services;
         }

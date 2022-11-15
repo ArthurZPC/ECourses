@@ -1,5 +1,8 @@
 ﻿using ECourses.ApplicationCore.Common.Interfaces.Converters;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
+using ECourses.ApplicationCore.RabbitMQ.Interfaces;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands;
+using ECourses.ApplicationCore.RabbitMQ.Logging.Commands.Enums;
 using ECourses.Data.Common.Interfaces.Repositories;
 using ECourses.Data.Entities;
 using ECourses.Data.Identity;
@@ -15,17 +18,20 @@ namespace ECourses.ApplicationCore.Features.Commands.Authors
         private readonly IEntityValidator<Author> _authorEntityValidator;
         private readonly IEntityValidator<User> _userEntityValidator;
         private readonly IAuthorConverter _authorConverter;
+        private readonly IRabbitMQService _rabbitMQService;
 
         public UpdateAuthorCommandHandler(IAuthorRepository authorRepository, IAuthorValidator authorValidator, 
             IEntityValidator<Author> authorEntityValidator, 
             IEntityValidator<User> userEntityValidator,
-            IAuthorConverter authorConverter)
+            IAuthorConverter authorConverter,
+            IRabbitMQService rabbitMQService)
         {
             _authorRepository = authorRepository;
             _authorValidator = authorValidator;
             _authorEntityValidator = authorEntityValidator;
             _userEntityValidator = userEntityValidator;
             _authorConverter = authorConverter;
+            _rabbitMQService = rabbitMQService;
         }
 
         public async Task<Unit> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
@@ -42,6 +48,10 @@ namespace ECourses.ApplicationCore.Features.Commands.Authors
 
             var author = _authorConverter.ConvertToAuthor(request);
             await _authorRepository.Update(author);
+
+            var loggingMessage = new CommandLoggingMessage<UpdateAuthorCommand>(request, CommandType.Update, DateTime.Now);
+
+            _rabbitMQService.SendMessage(loggingMessage);
 
             return await Task.FromResult(Unit.Value);
         }
