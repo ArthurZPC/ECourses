@@ -123,23 +123,23 @@ namespace ECourses.ApplicationCore.Features.Queries.Courses
                 CourseOrderQueryConstants.PriceAsc => new OrderOptions<Course>
                 {
                     Type = OrderType.Ascending,
-                    FieldSelector = c => c.Price
+                    FieldSelector = c => c.Price!
                 },
                 CourseOrderQueryConstants.PriceDesc => new OrderOptions<Course>
                 {
                     Type = OrderType.Descending,
-                    FieldSelector = c => c.Price
+                    FieldSelector = c => c.Price!
                 },
 
                 CourseOrderQueryConstants.PublishedAtAsc => new OrderOptions<Course>
                 {
                     Type = OrderType.Ascending,
-                    FieldSelector = c => c.PublishedAt
+                    FieldSelector = c => c.PublishedAt!
                 },
                 CourseOrderQueryConstants.PublishedAtDesc => new OrderOptions<Course>
                 {
                     Type = OrderType.Descending,
-                    FieldSelector = c => c.PublishedAt
+                    FieldSelector = c => c.PublishedAt!
                 },
                 _ => null
             };

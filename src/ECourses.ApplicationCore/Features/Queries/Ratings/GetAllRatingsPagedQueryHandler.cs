@@ -86,12 +86,12 @@ namespace ECourses.ApplicationCore.Features.Queries.Ratings
                 RatingOrderQueryConstants.ValueAsc => new OrderOptions<Rating>
                 {
                     Type = OrderType.Ascending,
-                    FieldSelector = r => r.Value
+                    FieldSelector = r => r.Value!
                 },
                 RatingOrderQueryConstants.ValueDesc => new OrderOptions<Rating>
                 {
                     Type = OrderType.Descending,
-                    FieldSelector = r => r.Value
+                    FieldSelector = r => r.Value!
                 },
                 _ => null
             };
