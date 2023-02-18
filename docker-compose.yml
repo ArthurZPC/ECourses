@@ -1,0 +1,34 @@
+version: "3.4"
+
+services:
+    app:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "5000:80"
+        depends_on:
+          - db
+          - rabbitmq
+
+    db:
+        image: "mcr.microsoft.com/mssql/server:2019-latest"
+        ports:
+          - "1433:1433"
+
+        environment:
+            SA_PASSWORD: "Super@Str0ngPass"
+            ACCEPT_EULA: "Y"
+            
+    rabbitmq:
+        image: "rabbitmq:management"
+        ports:
+          - "15672:15672"
+          
+    applogger:
+        build:
+            context: ../ECoursesLogger
+            dockerfile: Dockerfile
+        depends_on:
+            - db
+            - rabbitmq

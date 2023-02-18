@@ -14,7 +14,7 @@
     "Key": "VerySecreetKey1!"
   },
   "RabbitMQ": {
-    "HostName": "rabbitmq",
+    "HostName": "localhost",
     "QueueName": "LoggingQueue"
   },
   "AllowedHosts": "*"
