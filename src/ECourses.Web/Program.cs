@@ -13,22 +13,23 @@ using ECourses.ApplicationCore.RabbitMQ.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
-var defaultConnectionString = configuration.GetConnectionString("DockerConnection");
+var defaultConnectionString = configuration.GetConnectionString("DefaultConnection");
 
 var jwtKey = configuration.GetValue<string>("JWT:Key");
 var jwtKeyBytes = Encoding.ASCII.GetBytes(jwtKey);
 
 builder.Services
     .ConfigureDatabase(defaultConnectionString)
-    .ConfigureIdentity();
+    .AddIdentityServices();
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
-    options.SuppressModelStateInvalidFilter = true;
+    //options.SuppressModelStateInvalidFilter = true;
 })
     .Configure<WebRootOptions>(x => x.WebRootLocation = builder.Configuration.GetValue<string>("WebRootLocation"))
     .Configure<JwtOptions>(builder.Configuration.GetSection("JWT"))
-    .Configure<RabbitMQOptions>(builder.Configuration.GetSection("RabbitMQ"));
+    .Configure<RabbitMQOptions>(builder.Configuration.GetSection("RabbitMQ"))
+    .Configure<PasswordSettingsOptions>(builder.Configuration.GetSection("PasswordSettings"));
 
 builder.Services
     .AddStartupTasks()
@@ -76,6 +77,7 @@ builder.Services
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddJwtAuthentication(jwtKeyBytes);
+builder.Services.AddAuthorizationCore();
 
 builder.Services.AddMediatR(typeof(JwtOptions).Assembly);
 
@@ -102,8 +104,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<ExceptionMiddleware>();
-
 app.UseMiddleware<JwtMiddleware>();
+
 
 app.UseEndpoints(c => c.MapControllers());
 

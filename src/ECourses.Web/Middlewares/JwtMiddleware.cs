@@ -1,5 +1,5 @@
 ﻿using ECourses.ApplicationCore.Common.Configuration;
-using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Common.Interfaces.Services.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -55,15 +55,23 @@ namespace ECourses.Web.Middlewares
                 var userInfo = await userService.GetUserById(userId);
 
                 if (userInfo is not null) 
-                { 
-                    var user = new ClaimsPrincipal(
-                        new ClaimsIdentity(new Claim[]
-                        {
-                            new Claim(ClaimTypes.Name, $"User: {token}"),
-                            new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
-                            new Claim(ClaimTypes.Email, userInfo.Email),
-                            new Claim(ClaimTypes.Role, userInfo.Role),
-                        },JwtBearerDefaults.AuthenticationScheme));
+                {
+                    var userRolesClaim = userInfo.Roles.Any() ? new Claim(ClaimTypes.Role, string.Join(", ", userInfo.Roles.Select(r => r.Name))) : null;
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, $"User: {token}"),
+                        new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
+                        new Claim(ClaimTypes.Email, userInfo.Email)
+                    };
+
+                    if (userRolesClaim is not null)
+                    {
+                        claims.Add(userRolesClaim);
+                    }
+
+                    var user = new ClaimsPrincipal(new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme));
+
                     context.User = user;
                 }
             }

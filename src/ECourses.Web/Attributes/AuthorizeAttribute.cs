@@ -17,7 +17,7 @@ namespace ECourses.Web.Attributes
         {
             var user = context.HttpContext.User;
 
-            if (user.Identity!.Name == null)
+            if (user.Identity!.Name is null)
             {
                 var errorDetails = new ErrorDetails
                 {
@@ -28,13 +28,19 @@ namespace ECourses.Web.Attributes
                 {
                     StatusCode = StatusCodes.Status401Unauthorized,
                 };
+
+                return;
             }
 
-
-            if (Roles != null)
+            if (Roles is not null)
             {
-                string[] roles = Roles.Trim().Split(",");
-                if (!roles.Contains(user.FindFirst(ClaimTypes.Role)!.Value))
+                var roles = Roles.Trim().Split(",");
+
+                var userRoles = user.FindFirst(ClaimTypes.Role)?.Value;
+
+                var userRolesList = userRoles?.Split(",");
+
+                if (userRolesList is null || !roles.Any(r => userRolesList.Contains(r)))
                 {
                     var errorDetails = new ErrorDetails
                     {

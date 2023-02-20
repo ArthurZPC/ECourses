@@ -1,4 +1,4 @@
-﻿using ECourses.ApplicationCore.Common.Interfaces.Services;
+﻿using ECourses.ApplicationCore.Common.Interfaces.Services.Identity;
 using ECourses.Web.Attributes;
 using ECourses.Web.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -41,11 +41,21 @@ namespace ECourses.Web.Controllers
         }
 
         [HttpPost("RegisterInRole")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> RegisterInRole(string email, string password, string role)
         {
             await _userService.Register(email, password, role);
 
             return CreatedAtAction(nameof(RegisterInRole), null);
+        }
+
+        [HttpPost(nameof(CreateRole))]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> CreateRole(string roleName)
+        {
+            await _userService.Create(roleName);
+
+            return CreatedAtAction(nameof(CreateRole), null);
         }
     }
 }
