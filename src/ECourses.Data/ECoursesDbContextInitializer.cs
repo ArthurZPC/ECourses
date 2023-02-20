@@ -68,7 +68,10 @@ namespace ECourses.Data
             if (administrators.Count == 0)
             {
                 await _userDataService.Create(defaultUser, "admin!");
-                await _userDataService.AddRoleToUser(administratorRole, defaultUser.Id);
+
+                var role = _context.Roles.FirstOrDefault(r => r.Name == administratorRole.Name);
+
+                await _userDataService.AddRoleToUser(role, defaultUser.Id);
             }
         }
     }
