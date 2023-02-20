@@ -6,7 +6,7 @@ namespace ECourses.Data.Extensions
 {
     public static class IQueryableExtensions
     {
-        public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> query, PaginationOptions? paginationOptions = default)
+        public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> query, PaginationOptions? paginationOptions = default) where T : Entity
         {
             int count;
             int offset;
@@ -26,7 +26,7 @@ namespace ECourses.Data.Extensions
 
             var totalCount = await query.CountAsync();
 
-            var items = await query.Skip(count * offset - count).Take(count).ToListAsync();
+            var items = await query.OrderBy(x => x.Id).Skip(count * offset - count).Take(count).ToListAsync();
 
             return new PagedList<T>
             {
