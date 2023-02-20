@@ -13,7 +13,7 @@ using ECourses.ApplicationCore.RabbitMQ.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
-var defaultConnectionString = configuration.GetConnectionString("DefaultConnection");
+var defaultConnectionString = configuration.GetConnectionString("DockerConnection");
 
 var jwtKey = configuration.GetValue<string>("JWT:Key");
 var jwtKeyBytes = Encoding.ASCII.GetBytes(jwtKey);
