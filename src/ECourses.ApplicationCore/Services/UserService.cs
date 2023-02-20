@@ -1,12 +1,11 @@
 ﻿using ECourses.ApplicationCore.Common.Configuration;
+using ECourses.ApplicationCore.Common.Interfaces.Converters;
 using ECourses.ApplicationCore.Common.Interfaces.Services.Identity;
 using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Models;
-using ECourses.Data;
 using ECourses.Data.Common;
 using ECourses.Data.Common.Interfaces;
 using ECourses.Data.Identity;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,18 +21,21 @@ namespace ECourses.ApplicationCore.Services
         private readonly IUserDataService _userDataService;
         private readonly IRoleDataService _roleDataService;
         private readonly IEntityValidator<User> _entityValidator;
+        private readonly IUserConverter _userConverter;
 
         public UserService(IOptions<JwtOptions> jwtOptions,
             IPasswordService passwordService,
             IUserDataService userDataService,
             IRoleDataService roleDataService,
-            IEntityValidator<User> entityValidator)
+            IEntityValidator<User> entityValidator,
+            IUserConverter userConverter)
         {
             _jwtOptions = jwtOptions.Value;
             _passwordService = passwordService;
             _userDataService = userDataService;
             _roleDataService = roleDataService;
             _entityValidator = entityValidator;
+            _userConverter = userConverter;
         }
 
         public async Task AddRoleToUser(Role role, Guid userId)
@@ -61,19 +63,19 @@ namespace ECourses.ApplicationCore.Services
             return await _userDataService.GetAllUsersInRole(roleName);
         }
 
-        public Task<Role> GetRoleByName(string roleName)
+        public async Task<Role> GetRoleByName(string roleName)
         {
-            return _roleDataService.GetRoleByName(roleName);
+            return await _roleDataService.GetRoleByName(roleName);
         }
 
-        public Task<User?> GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmail(string email)
         {
-            return _userDataService.GetUserByEmail(email);
+            return await _userDataService.GetUserByEmail(email);
         }
 
-        public Task<User?> GetUserById(Guid id)
+        public async Task<User?> GetUserById(Guid id)
         {
-            return _userDataService.GetUserById(id);
+            return await _userDataService.GetUserById(id);
         }
 
         public async Task<bool> IsRoleExists(string roleName)

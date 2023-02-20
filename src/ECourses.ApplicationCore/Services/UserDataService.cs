@@ -30,10 +30,9 @@ namespace ECourses.ApplicationCore.Services
         {
             await _roleEntityValidator.ValidateIfEntityNotFoundByCondition(r => r.Id == role.Id);
             await _userEntityValidator.ValidateIfEntityNotFoundByCondition(u => u.Id == userId);
-
+           
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-            user!.Roles.Add(role);
+            user.Roles.Add(role);
 
             await _context.SaveChangesAsync();
         }
@@ -65,6 +64,8 @@ namespace ECourses.ApplicationCore.Services
 
         public async Task<PagedList<User>> GetAllUsersInRole(string roleName)
         {
+            await _roleEntityValidator.ValidateIfEntityNotFoundByCondition(r => r.Name == roleName);
+
             return await _context.Users
                 .Include(u => u.Ratings)
                 .Include(u => u.Roles)
@@ -74,17 +75,23 @@ namespace ECourses.ApplicationCore.Services
 
         public async Task<User?> GetUserByEmail(string email)
         {
+            await _userEntityValidator.ValidateIfEntityNotFoundByCondition(u => u.Email == email);
+
             return await _context.Users
                 .Include(u => u.Ratings)
                 .Include(u => u.Roles)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User?> GetUserById(Guid id)
         {
+            await _userEntityValidator.ValidateIfEntityNotFoundByCondition(u => u.Id == id);
+
             return await _context.Users
                 .Include(u => u.Ratings)
                 .Include(u => u.Roles)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
     }

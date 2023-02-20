@@ -10,32 +10,32 @@ namespace ECourses.Web.Controllers
     [ProducesErrorResponseType(typeof(ErrorDetails))]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserManager _userManager;
 
-        public UserController(IUserService userService)
+        public UserController(IUserManager userManager)
         {
-            _userService = userService;
+            _userManager = userManager;
         }
 
         [HttpGet("Roles/{role}")]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> GetAllUsersInRole(string role = "Administrator")
         {
-           var users = await _userService.GetAllUsersInRole(role);
+           var users = await _userManager.GetAllUsersInRole(role);
            return Ok(users);
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login(string email, string password)
         {
-            var user = await _userService.Login(email, password);
+            var user = await _userManager.Login(email, password);
             return Ok(user);
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register(string email, string password)
         {
-            await _userService.Register(email, password, "User");
+            await _userManager.Register(email, password, "User");
 
             return CreatedAtAction(nameof(Register), null);
         }
@@ -44,7 +44,7 @@ namespace ECourses.Web.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> RegisterInRole(string email, string password, string role)
         {
-            await _userService.Register(email, password, role);
+            await _userManager.Register(email, password, role);
 
             return CreatedAtAction(nameof(RegisterInRole), null);
         }
@@ -53,7 +53,7 @@ namespace ECourses.Web.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateRole(string roleName)
         {
-            await _userService.Create(roleName);
+            await _userManager.Create(roleName);
 
             return CreatedAtAction(nameof(CreateRole), null);
         }

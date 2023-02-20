@@ -63,6 +63,9 @@ namespace ECourses.ApplicationCore.Extensions
             services.AddTransient<IVideoValidator, VideoValidator>();
             services.AddScoped<IVideoRepository, VideoRepository>();
 
+            services.AddTransient<IRoleConverter, RoleConverter>();
+            services.AddTransient<IUserConverter, UserConverter>();
+
             return services;
         }
 
@@ -113,6 +116,7 @@ namespace ECourses.ApplicationCore.Extensions
             services.AddScoped<IRoleDataService, RoleDataService>();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserManager, UserManager>();
 
             return services;
         }
