@@ -6,7 +6,6 @@ using ECourses.ApplicationCore.Services;
 using ECourses.ApplicationCore.Validators;
 using ECourses.Data;
 using ECourses.Data.Common.Interfaces.Repositories;
-using ECourses.Data.Identity;
 using ECourses.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using ECourses.ApplicationCore.Common.Interfaces;
@@ -14,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using ECourses.ApplicationCore.RabbitMQ.Interfaces;
 using ECourses.ApplicationCore.RabbitMQ.Services;
+using ECourses.ApplicationCore.Common.Interfaces.Services.Identity;
+using ECourses.Data.Common.Interfaces;
 
 namespace ECourses.ApplicationCore.Extensions
 {
@@ -27,18 +28,6 @@ namespace ECourses.ApplicationCore.Extensions
             services.AddScoped<ECoursesDbContextInitializer>();
 
             return services;                      
-        }
-
-        public static IServiceCollection ConfigureIdentity(this IServiceCollection services)
-        {
-            services.AddIdentity<User, Role>(o =>
-            {
-                o.Password.RequireDigit = false;
-                o.Password.RequireUppercase = false;
-            })
-                .AddEntityFrameworkStores<ECoursesDbContext>();
-
-            return services;
         }
 
         public static IServiceCollection AddStartupTask<T>(this IServiceCollection services) where T :class, IStartupTask
@@ -112,6 +101,18 @@ namespace ECourses.ApplicationCore.Extensions
                     ValidateAudience = false
                 };
             });
+
+            return services;
+        }
+
+        public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        {
+            services.AddTransient<IPasswordService, PasswordService>();
+
+            services.AddScoped<IUserDataService, UserDataService>();
+            services.AddScoped<IRoleDataService, RoleDataService>();
+
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

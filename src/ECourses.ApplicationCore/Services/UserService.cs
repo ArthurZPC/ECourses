@@ -1,7 +1,10 @@
 ﻿using ECourses.ApplicationCore.Common.Configuration;
-using ECourses.ApplicationCore.Common.Interfaces.Services;
+using ECourses.ApplicationCore.Common.Interfaces.Services.Identity;
+using ECourses.ApplicationCore.Common.Interfaces.Validators;
 using ECourses.ApplicationCore.Models;
-using ECourses.ApplicationCore.ViewModels;
+using ECourses.Data;
+using ECourses.Data.Common;
+using ECourses.Data.Common.Interfaces;
 using ECourses.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -15,94 +18,133 @@ namespace ECourses.ApplicationCore.Services
     public class UserService : IUserService
     {
         private readonly JwtOptions _jwtOptions;
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        private readonly IPasswordService _passwordService;
+        private readonly IUserDataService _userDataService;
+        private readonly IRoleDataService _roleDataService;
+        private readonly IEntityValidator<User> _entityValidator;
 
-        public UserService(IOptions<JwtOptions> jwtOptions, 
-            SignInManager<User> signInManager, 
-            UserManager<User> userManager)
+        public UserService(IOptions<JwtOptions> jwtOptions,
+            IPasswordService passwordService,
+            IUserDataService userDataService,
+            IRoleDataService roleDataService,
+            IEntityValidator<User> entityValidator)
         {
             _jwtOptions = jwtOptions.Value;
-            _signInManager = signInManager;
-            _userManager = userManager;
+            _passwordService = passwordService;
+            _userDataService = userDataService;
+            _roleDataService = roleDataService;
+            _entityValidator = entityValidator;
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllUsersInRole(string role)
+        public async Task AddRoleToUser(Role role, Guid userId)
         {
-            var users = await _userManager.GetUsersInRoleAsync(role);
-
-            return users.Select(u => new UserViewModel
-            {
-                Id = u.Id,
-                Email = u.Email,
-                Role = role,
-            });
+            await _userDataService.AddRoleToUser(role, userId);
         }
 
-        public async Task<UserViewModel?> GetUserById(Guid id)
+        public async Task Create(User user, string password)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            await _userDataService.Create(user, password);
+        }
 
-            var userRole = await _userManager.GetRolesAsync(user);
+        public async Task Create(string roleName)
+        {
+            await _roleDataService.Create(roleName);
+        }
 
-            return new UserViewModel
-            {
-                Id = user.Id,
-                Email = user.Email,
-                Role = userRole.FirstOrDefault()!
-            };
+        public async Task<IEnumerable<Role>> GetAllUserRoles(Guid userId)
+        {
+            return await _userDataService.GetAllUserRoles(userId);
+        }
+
+        public async Task<PagedList<User>> GetAllUsersInRole(string roleName)
+        {
+            return await _userDataService.GetAllUsersInRole(roleName);
+        }
+
+        public Task<Role> GetRoleByName(string roleName)
+        {
+            return _roleDataService.GetRoleByName(roleName);
+        }
+
+        public Task<User?> GetUserByEmail(string email)
+        {
+            return _userDataService.GetUserByEmail(email);
+        }
+
+        public Task<User?> GetUserById(Guid id)
+        {
+            return _userDataService.GetUserById(id);
+        }
+
+        public async Task<bool> IsRoleExists(string roleName)
+        {
+            return await _roleDataService.IsRoleExists(roleName);
         }
 
         public async Task<IdentityModel?> Login(string email, string password)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            await _entityValidator.ValidateIfEntityNotFoundByCondition(u => u.Email == email);
+
+            var user = await _userDataService.GetUserByEmail(email);
 
             if (user is null)
             {
                 return null;
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+            var hashedPassword = new HashedPasswordModel(user.PasswordHash, user.PasswordSalt);
 
-            if (result.Succeeded)
+            var isPasswordCorrect = _passwordService.VerifyPassword(password, hashedPassword);
+
+            if (isPasswordCorrect)
             {
-                var userRole = await _userManager.GetRolesAsync(user);
+                var userRoles = await _userDataService.GetAllUserRoles(user.Id);
+                var userRolesClaim = userRoles.Any() ? new Claim(ClaimTypes.Role, string.Join(", ", userRoles.Select(r => r.Name))) : null;
+
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_jwtOptions.Key);
-                var tokenDescriptor = new SecurityTokenDescriptor
+
+                var claims = new List<Claim>
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
                     new Claim(ClaimTypes.Name, $"User"),
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, userRole.FirstOrDefault()!),
-                    }),
+                };
+
+                if (userRolesClaim is not null)
+                {
+                    claims.Add(userRolesClaim);
+                }
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(claims),
                     Expires = DateTime.UtcNow.AddDays(7),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
+
                 var token = tokenHandler.CreateToken(tokenDescriptor);
 
-                return new IdentityModel
-                {
-                    Token = tokenHandler.WriteToken(token)
-                };
+                return new IdentityModel(tokenHandler.WriteToken(token));
             }
 
             return null;
         }
 
-        public async Task Register(string email, string password, string role)
+        public async Task Register(string email, string password, string roleName)
         {
             var user = new User
             {
+                Id = Guid.NewGuid(),
                 Email = email,
-                UserName = email,
+                Username = email,
             };
 
-            var result1 = await _userManager.CreateAsync(user, password);
-            var result2 = await _userManager.AddToRoleAsync(user, role);
+            var role = await _roleDataService.GetRoleByName(roleName);
+
+            await _userDataService.Create(user, password);
+            await _userDataService.AddRoleToUser(role, user.Id);
         }
     }
 }
