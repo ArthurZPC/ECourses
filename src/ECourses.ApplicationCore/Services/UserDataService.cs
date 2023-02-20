@@ -28,7 +28,7 @@ namespace ECourses.ApplicationCore.Services
         }
         public async Task AddRoleToUser(Role role, Guid userId)
         {
-            await _roleEntityValidator.ValidateIfEntityNotFoundByCondition(r => r.Id == role.Id);
+            await _roleEntityValidator.ValidateIfEntityNotFoundByCondition(r => r.Name == role.Name);
             await _userEntityValidator.ValidateIfEntityNotFoundByCondition(u => u.Id == userId);
            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
