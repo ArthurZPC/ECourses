@@ -13,6 +13,7 @@ namespace ECourses.Data
         public DbSet<Author> Authors => Set<Author>();
         public DbSet<Video> Videos => Set<Video>();
         public DbSet<User> Users => Set<User>();
+        public DbSet<Role> Roles => Set<Role>();
 
         public ECoursesDbContext(DbContextOptions<ECoursesDbContext> options) : base(options) { }
 

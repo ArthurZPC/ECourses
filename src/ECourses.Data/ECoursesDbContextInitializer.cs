@@ -53,7 +53,7 @@ namespace ECourses.Data
 
             if (!await _roleDataService.IsRoleExists(administratorRole.Name))
             {
-                await _roleDataService.Create(administratorRole);
+                await _roleDataService.Create(administratorRole.Name);
             }
 
             var defaultUser = new User()
@@ -65,7 +65,7 @@ namespace ECourses.Data
 
             var administrators = await _userDataService.GetAllUsersInRole(administratorRole.Name);
 
-            if (administrators.Count() == 0)
+            if (administrators.Count == 0)
             {
                 await _userDataService.Create(defaultUser, "admin!");
                 await _userDataService.AddRoleToUser(administratorRole, defaultUser.Id);

@@ -6,6 +6,8 @@ namespace ECourses.Data.Common.Interfaces
     {
         public Task<bool> IsRoleExists(string roleName);
 
-        public Task Create(Role role);
+        public Task Create(string roleName);
+
+        Task<Role> GetRoleByName(string roleName);
     }
 }
